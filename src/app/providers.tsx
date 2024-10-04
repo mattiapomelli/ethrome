@@ -1,13 +1,15 @@
 "use client";
 
 import "@rainbow-me/rainbowkit/styles.css";
-
-import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { PrivyClientConfig, PrivyProvider } from "@privy-io/react-auth";
+import { createConfig } from "@privy-io/wagmi";
+import { WagmiProvider } from "@privy-io/wagmi";
+import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { ReactNode } from "react";
-import { http, createConfig, WagmiProvider } from "wagmi";
-import { mainnet, sepolia } from "wagmi/chains";
+import { defineChain } from "viem";
+import { http } from "wagmi";
 
 import { env } from "@/env.mjs";
 
@@ -17,31 +19,49 @@ declare module "wagmi" {
   }
 }
 
-const config = getDefaultConfig({
-  appName: "My RainbowKit App",
-  projectId: env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
-  chains: [mainnet, sepolia],
-  ssr: true,
+const iexec = defineChain({
+  id: 134,
+  name: "iExec",
+  nativeCurrency: {
+    decimals: 18,
+    name: "xRLC",
+    symbol: "xRLC",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://bellecour.iex.ec"],
+    },
+  },
 });
 
 export const wagmiConfig = createConfig({
-  chains: [mainnet, sepolia],
+  chains: [iexec],
   transports: {
-    [mainnet.id]: http(),
-    [sepolia.id]: http(),
+    [iexec.id]: http(),
   },
 });
+
+const privyConfig: PrivyClientConfig = {
+  embeddedWallets: {
+    createOnLogin: "users-without-wallets",
+    requireUserPasswordOnCreate: false,
+    noPromptOnSignature: true,
+  },
+  loginMethods: ["farcaster"],
+};
 
 const queryClient = new QueryClient();
 
 export default function Providers({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-      <WagmiProvider config={wagmiConfig}>
+      <PrivyProvider appId={env.NEXT_PUBLIC_PRIVY_APP_ID} config={privyConfig}>
         <QueryClientProvider client={queryClient}>
-          <RainbowKitProvider>{children}</RainbowKitProvider>
+          <WagmiProvider config={wagmiConfig}>
+            <RainbowKitProvider>{children}</RainbowKitProvider>
+          </WagmiProvider>
         </QueryClientProvider>
-      </WagmiProvider>
+      </PrivyProvider>
     </ThemeProvider>
   );
 }
