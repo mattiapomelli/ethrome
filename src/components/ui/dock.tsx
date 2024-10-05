@@ -3,9 +3,8 @@
 import { usePrivy } from "@privy-io/react-auth";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
-import { redirect, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
-import { useAccount } from "wagmi";
 
 import { cn } from "@/lib/utils";
 
@@ -21,11 +20,8 @@ type DockProps = {
 };
 
 export const Dock = ({ items, className }: DockProps) => {
-  const { isConnected } = useAccount();
   const { logout } = usePrivy();
   const pathname = usePathname();
-
-  if (!isConnected) redirect("/");
 
   return (
     <div className="fixed inset-x-5 bottom-5 z-50">
