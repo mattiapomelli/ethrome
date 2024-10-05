@@ -1,4 +1,25 @@
+import { Home, Link2Off, Plus } from "lucide-react";
 import { ReactNode } from "react";
+
+import { Dock } from "@/components/ui/dock";
+
+const links = [
+  {
+    title: "Feeds",
+    icon: <Home className="size-4" />,
+    href: "/feed",
+  },
+  {
+    title: "Create",
+    icon: <Plus className="size-4" />,
+    href: "/create",
+  },
+  {
+    title: "Disconnect",
+    icon: <Link2Off className="size-4" />,
+    href: "#",
+  },
+];
 
 const Layout = ({
   children,
@@ -8,9 +29,7 @@ const Layout = ({
   return (
     <>
       {children}
-      <div className="fixed inset-x-0 bottom-0 bg-primary-foreground/10 px-6 py-4 backdrop-blur-xl">
-        bottom
-      </div>
+      <Dock items={links} />
     </>
   );
 };
