@@ -1,7 +1,8 @@
 "use client";
 
 import { useFarcasterSigner, usePrivy } from "@privy-io/react-auth";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 import { AnimatedText } from "@/components/animated-text";
 import { LoginButton } from "@/components/login-button";
@@ -12,8 +13,14 @@ import { useFarcasterAccount } from "@/lib/farcaster";
 const App = () => {
   const { logout, ready } = usePrivy();
   const { requestFarcasterSignerFromWarpcast } = useFarcasterSigner();
-
   const { farcasterAccount, hasGivenAuthorization } = useFarcasterAccount();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (ready && farcasterAccount && hasGivenAuthorization) {
+      router.push("/feed");
+    }
+  }, [ready, farcasterAccount, hasGivenAuthorization, router]);
 
   if (!ready) return null;
 
@@ -45,7 +52,8 @@ const App = () => {
     );
   }
 
-  return redirect("/feed");
+  // This will be shown briefly while redirecting
+  return <div>Redirecting to feed...</div>;
 };
 
 export default App;
