@@ -40,7 +40,7 @@ export function useSetDataForRenting(
     mutationFn: async ({
       data,
       name,
-      price,
+      // price,
       duration,
       collectionId: _collectionId,
     }: SetDataForRentingParams) => {
@@ -121,7 +121,7 @@ export function useSetDataForRenting(
       const setProtectedDataToRentingResponse =
         await dataProtectorSharing.setProtectedDataToRenting({
           protectedData: protectedData.address,
-          price,
+          price: 0,
           duration,
         });
 

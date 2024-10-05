@@ -14,12 +14,13 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useSetDataForRenting } from "@/lib/hooks/iexec/use-set-data-for-renting";
+import { convertFileToBase64 } from "@/lib/utils";
 
 const formSchema = z.object({
   text: z.string().min(1, "Text is required"),
   price: z.number().min(0, "Price must be a positive number"),
-  picture: z.instanceof(File).optional(),
-  preview: z.instanceof(File).optional(),
+  picture: z.instanceof(File),
+  preview: z.instanceof(File),
 });
 
 const CreatePage = () => {
@@ -47,17 +48,20 @@ const CreatePage = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("data", data);
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    if (!data.picture) return;
+
+    const image = (await convertFileToBase64(data.picture)) as string;
+    // const preview = (await convertFileToBase64(data.preview)) as string;
 
     setDataForRenting({
-      price: 0,
+      price: data.price,
       duration: 60 * 60 * 24 * 30, // 30 days
       data: {
         // A binary "file" field must be used if you use the app provided by iExec
-        file: new TextEncoder().encode("Ciao!"),
+        file: new TextEncoder().encode(image),
       },
-      name: "Test Data",
+      name: data.text,
     });
   };
 

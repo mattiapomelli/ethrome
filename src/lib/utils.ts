@@ -49,6 +49,21 @@ export function deriveAccountFromUid(uid: string) {
   console.log("Private Key: ", privateKey);
 
   return privateKey;
-
   // return privateKeyToAccount(privateKey);
+}
+
+export function convertFileToBase64(file: File) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    // Event listener for when the file has been read
+    reader.onloadend = () => {
+      resolve(reader.result);
+    };
+    // Event listener for errors during reading
+    reader.onerror = (error) => {
+      reject(error);
+    };
+    // Read the file as a Data URL (Base64 encoded)
+    reader.readAsDataURL(file);
+  });
 }
