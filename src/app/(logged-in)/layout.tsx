@@ -8,7 +8,9 @@ const Layout = ({
   return (
     <>
       {children}
-      <div className="fixed inset-x-0 bottom-0 px-6 py-4 backdrop-blur-xl">bottom</div>
+      <div className="fixed inset-x-0 bottom-0 bg-primary-foreground/10 px-6 py-4 backdrop-blur-xl">
+        bottom
+      </div>
     </>
   );
 };
