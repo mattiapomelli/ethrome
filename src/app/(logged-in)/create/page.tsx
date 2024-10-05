@@ -106,7 +106,7 @@ const CreatePage = () => {
                       <Textarea
                         {...field}
                         placeholder="Enter your text here..."
-                        className="min-h-[100px] resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        className="min-h-[50px] resize-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                       />
                     </FormControl>
                     <FormMessage />
@@ -152,8 +152,8 @@ const CreatePage = () => {
                                 className="mt-2 flex w-full items-center justify-center"
                                 onClick={() => document.getElementById("picture-upload")?.click()}
                               >
-                                <Paperclip className="mr-2 size-4" />
-                                {picturePreview ? "Replace picture" : "Add picture"}
+                                <Paperclip className="size-4 min-w-4" />
+                                {picturePreview ? "Replace" : "Add picture"}
                               </Button>
                             </>
                           </FormControl>
@@ -199,8 +199,8 @@ const CreatePage = () => {
                                 className="mt-2 flex w-full items-center justify-center"
                                 onClick={() => document.getElementById("preview-upload")?.click()}
                               >
-                                <Paperclip className="mr-2 size-4" />
-                                {previewPreview ? "Replace preview" : "Add preview"}
+                                <Paperclip className="size-4 min-w-4" />
+                                {previewPreview ? "Replace" : "Add preview"}
                               </Button>
                             </>
                           </FormControl>
@@ -236,7 +236,7 @@ const CreatePage = () => {
                 />
               </div>
             </CardContent>
-            <CardFooter className="flex justify-end border-t p-4">
+            <CardFooter className="flex justify-center border-t px-4 py-2">
               <Button
                 type="submit"
                 size="sm"

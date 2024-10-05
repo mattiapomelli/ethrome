@@ -1,8 +1,11 @@
 "use client";
 
+import { usePrivy } from "@privy-io/react-auth";
+import { LogOut } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { ReactNode } from "react";
+import { useAccount } from "wagmi";
 
 import { cn } from "@/lib/utils";
 
@@ -18,12 +21,17 @@ type DockProps = {
 };
 
 export const Dock = ({ items, className }: DockProps) => {
+  const { isConnected } = useAccount();
+  const { logout } = usePrivy();
   const pathname = usePathname();
+
+  if (!isConnected) redirect("/");
+
   return (
     <div className="fixed inset-x-5 bottom-5 z-50">
       <div
         className={cn(
-          "mx-auto flex w-fit items-center justify-center gap-x-4 rounded-full bg-foreground/10 px-3 py-2 backdrop-blur-sm",
+          "mx-auto flex w-fit items-center justify-center gap-x-4 rounded-xl bg-foreground/10 px-3 py-2 backdrop-blur-sm",
           className,
         )}
       >
@@ -39,6 +47,15 @@ export const Dock = ({ items, className }: DockProps) => {
             </div>
           </Link>
         ))}
+
+        <button
+          className={cn(
+            "relative flex aspect-square items-center justify-center rounded-full p-2 transition-colors duration-300 ease-out hover:bg-foreground/20",
+          )}
+          onClick={logout}
+        >
+          <LogOut className="size-4" />
+        </button>
       </div>
     </div>
   );
