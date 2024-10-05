@@ -2,11 +2,11 @@ import { useSignMessage } from "@privy-io/react-auth";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { useAccount } from "wagmi";
 
-// import { bellecour } from "@/app/providers";
 import { TransactionLinkButton } from "@/components/transaction-link-button";
 import { buttonVariants } from "@/components/ui/button";
 import { BELLECOUR_CHAIN_ID } from "@/lib/chains";
 import { farcasterClient, useFarcasterAccount, usePrivySigner } from "@/lib/farcaster";
+import { createEmbedUrl } from "@/lib/frames";
 import { toast } from "@/lib/hooks/use-toast";
 import {
   getDataProtectorCore,
@@ -163,7 +163,7 @@ export function useSetDataForRenting(
             url: JSON.stringify(embed),
           },
           {
-            url: previewUrl,
+            url: createEmbedUrl(previewUrl),
           },
         ],
       };
