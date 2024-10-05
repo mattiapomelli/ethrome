@@ -11,7 +11,13 @@ export const createEmbedUrl = (previewUrl: string) => {
 };
 
 export const extractPreviewUrl = (embedUrl: string) => {
-  const url = new URL(embedUrl);
-  const encodedPreviewUrl = url.searchParams.get("preview-url");
+  const baseUrl = siteConfig.url;
+  const prefix = `${baseUrl}/frames/`;
+
+  if (!embedUrl.startsWith(prefix)) {
+    return null;
+  }
+
+  const encodedPreviewUrl = embedUrl.slice(prefix.length).split("/")[0];
   return encodedPreviewUrl ? decodeURIComponent(encodedPreviewUrl) : null;
 };
