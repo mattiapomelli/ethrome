@@ -9,7 +9,7 @@ import {
   PROTECTED_DATA_DELIVERY_WHITELIST_ADDRESS,
 } from "@/lib/iexec";
 
-type AddDataToCollectionParams = {
+type SetDataForRentingParams = {
   data: Record<string, any>;
   name: string;
   price: number;
@@ -17,20 +17,11 @@ type AddDataToCollectionParams = {
   collectionId: number;
 };
 
-export function useSellData(
-  options?: Omit<
-    UseMutationOptions<string, Error, AddDataToCollectionParams, unknown>,
-    "mutationFn"
-  >,
+export function useSetDataForRenting(
+  options?: Omit<UseMutationOptions<string, Error, SetDataForRentingParams, unknown>, "mutationFn">,
 ) {
   return useMutation({
-    mutationFn: async ({
-      data,
-      name,
-      price,
-      duration,
-      collectionId,
-    }: AddDataToCollectionParams) => {
+    mutationFn: async ({ data, name, price, duration, collectionId }: SetDataForRentingParams) => {
       const dataProtectorCore = getDataProtectorCore();
       const dataProtectorSharing = getDataProtectorSharing();
 

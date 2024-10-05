@@ -9,20 +9,20 @@ import {
   PROTECTED_DATA_DELIVERY_DAPP_ADDRESS,
 } from "@/lib/iexec";
 
-type BuyDataParams = {
+type RentDataParams = {
   protectedDataAddress: string;
   price: number;
   duration: number;
 };
 
-export function useBuyData(
+export function useRentData(
   options?: Omit<
-    UseMutationOptions<{ taskId: string; content: string }, Error, BuyDataParams, unknown>,
+    UseMutationOptions<{ taskId: string; content: string }, Error, RentDataParams, unknown>,
     "mutationFn"
   >,
 ) {
   return useMutation({
-    mutationFn: async ({ protectedDataAddress, price, duration }: BuyDataParams) => {
+    mutationFn: async ({ protectedDataAddress, price, duration }: RentDataParams) => {
       const dataProtectorSharing = getDataProtectorSharing();
 
       // const oneProtectedData = await dataProtectorCore.getProtectedData({
