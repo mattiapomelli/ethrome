@@ -1,14 +1,56 @@
+"use client";
+
 import { Cast } from "@/components/ui/cast/cast";
+import { CastWithInteractions, EmbedUrl } from "@neynar/nodejs-sdk/build/neynar-api/v2";
+import { usePrivy } from "@privy-io/react-auth";
+import { useCallback, useEffect, useState } from "react";
 
 const FeedPage = () => {
+  const [casts, setCasts] = useState<CastWithInteractions[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { user } = usePrivy();
+
+  const fetchFeed = useCallback(async () => {
+    if (!user || !user.farcaster) return;
+
+    setLoading(true);
+
+    const viewerFid = user.farcaster.fid;
+
+    const response = await fetch(`/api/feed?viewerFid=${viewerFid}`);
+
+    if (!response.ok) {
+      console.error("Failed to fetch feed");
+      return;
+    }
+
+    const data = await response.json();
+
+    console.log(data);
+
+    setCasts(data);
+    setLoading(false);
+  }, [user]);
+
+  useEffect(() => {
+    fetchFeed();
+  }, [fetchFeed]);
+
   return (
-    <>
-      <Cast className="bg-red-300 text-2xl text-white">Cast 1</Cast>
-      <Cast className="bg-green-300 text-2xl text-white">Cast 2</Cast>
-      <Cast className="bg-blue-300 text-2xl text-white">Cast 3</Cast>
-      <Cast className="bg-amber-300 text-2xl text-white">Cast 4</Cast>
-      <Cast className="bg-purple-300 text-2xl text-white">Cast 5</Cast>
-    </>
+    <div className="size-full flex-1">
+      <div className="text-2xl font-bold">feed page</div>
+      {loading && <div>loading...</div>}
+      {!loading && (
+        <Cast className="flex flex-col gap-4">
+          {casts.map((cast) => (
+            <div key={cast.hash}>
+              <div>text: {cast.text}</div>
+              <div>url: {(cast.embeds?.[0] as EmbedUrl)?.url}</div>
+            </div>
+          ))}
+        </Cast>
+      )}
+    </div>
   );
 };
 

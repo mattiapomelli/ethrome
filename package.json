@@ -12,6 +12,7 @@
     "@formkit/auto-animate": "^0.8.2",
     "@hookform/resolvers": "^3.9.0",
     "@iexec/dataprotector": "2.0.0-beta.10",
+    "@neynar/nodejs-sdk": "^1.58.0",
     "@privy-io/react-auth": "^1.88.4",
     "@privy-io/wagmi": "^0.2.12",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
