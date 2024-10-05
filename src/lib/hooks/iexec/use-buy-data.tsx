@@ -1,8 +1,8 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 
 import { TransactionLinkButton } from "@/components/transaction-link-button";
-import { toast } from "@/hooks/use-toast";
 import { BELLECOUR_CHAIN_ID } from "@/lib/chains";
+import { toast } from "@/lib/hooks/use-toast";
 import {
   DEMO_WORKERPOOL_ADDRESS,
   getDataProtectorSharing,

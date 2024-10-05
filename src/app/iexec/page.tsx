@@ -2,13 +2,18 @@
 
 import { useState } from "react";
 
+import { TransactionLinkButton } from "@/components/transaction-link-button";
 import { Button } from "@/components/ui/button";
+import { BELLECOUR_CHAIN_ID } from "@/lib/chains";
 import { useBuyData } from "@/lib/hooks/iexec/use-buy-data";
 import { useCreateCollection } from "@/lib/hooks/iexec/use-create-collection";
 // import { useGetContent } from "@/lib/hooks/iexec/use-get-content";
 import { useSellData } from "@/lib/hooks/iexec/use-sell-data";
+import { useToast } from "@/lib/hooks/use-toast";
 
 export default function Home() {
+  const { toast } = useToast();
+
   const [protectedDataAddress, setProtectedDataAddress] = useState<string | null>(
     // "0x175a608592184418bcc4ba9ad7ff6dc4a5164a20",
     null,
@@ -91,6 +96,19 @@ export default function Home() {
 
         <Button onClick={onBuyData} loading={isBuyPending} disabled={isBuyPending}>
           Buy Data
+        </Button>
+
+        <Button
+          onClick={() => {
+            toast({
+              title: `${Math.random()}`,
+              description: "Successfully rented protected data.",
+              action: <TransactionLinkButton chainId={BELLECOUR_CHAIN_ID} txnHash={"0xoaisdn"} />,
+              variant: "default",
+            });
+          }}
+        >
+          Toast
         </Button>
       </div>
     </div>

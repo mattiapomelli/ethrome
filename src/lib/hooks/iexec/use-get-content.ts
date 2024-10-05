@@ -16,8 +16,6 @@ export function useGetContent(taskId: string) {
         },
       });
 
-      console.log("taskResult", taskResult);
-
       const decodedText = new TextDecoder().decode(taskResult.result);
       return decodedText;
     },
