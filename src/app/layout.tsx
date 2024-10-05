@@ -1,19 +1,12 @@
 import "./globals.css";
 
-import { Inter } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { ReactNode } from "react";
 
 import Providers from "@/app/providers";
-import { Header } from "@/components/layout/header";
 import { cn } from "@/lib/utils";
 
 import type { Metadata } from "next";
-
-const fontSans = Inter({ subsets: ["latin"], variable: "--font-sans" });
-
-const fontHeading = Inter({
-  subsets: ["latin"],
-  variable: "--font-heading",
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,22 +16,13 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body
-        className={cn(
-          "min-h-screen font-sans antialiased",
-          fontSans.variable,
-          fontHeading.variable,
-        )}
-      >
+      <body className={cn("min-h-screen font-sans antialiased", GeistSans.className)}>
         <Providers>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex w-full flex-1 flex-col">{children}</main>
-          </div>
+          <main className="flex min-h-screen flex-1 flex-col">{children} </main>
         </Providers>
       </body>
     </html>
