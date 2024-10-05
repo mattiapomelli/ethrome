@@ -5,6 +5,7 @@ import { Hex } from "viem";
 
 import { useCasts } from "@/app/(logged-in)/feed/_hooks/use-casts";
 import { Cast, UserInfo } from "@/components/ui/cast/cast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const isEmbedUrl = (embed: EmbeddedCast): embed is EmbedUrl => {
   return (embed as EmbedUrl).url !== undefined;
@@ -13,10 +14,9 @@ const isEmbedUrl = (embed: EmbeddedCast): embed is EmbedUrl => {
 const FeedPage = () => {
   const { data: casts, isLoading } = useCasts();
 
-  if (isLoading) return <div>loading...</div>;
-  if (!casts) return <div>No casts</div>;
+  if (isLoading) return <Skeleton className="flex-1" />;
 
-  return casts.map((cast) => {
+  return casts?.map((cast) => {
     const embeds = cast.embeds.map((embed) => {
       try {
         if (isEmbedUrl(embed)) {

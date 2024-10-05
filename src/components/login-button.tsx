@@ -9,7 +9,7 @@ export const LoginButton = () => {
   const disableLogin = !ready || (ready && authenticated);
 
   return (
-    <Button disabled={disableLogin} onClick={login}>
+    <Button size="sm" className="min-w-32" disabled={disableLogin} onClick={login}>
       Log in
     </Button>
   );

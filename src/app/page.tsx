@@ -3,9 +3,10 @@
 import { useFarcasterSigner, usePrivy } from "@privy-io/react-auth";
 import { redirect } from "next/navigation";
 
+import { AnimatedText } from "@/components/animated-text";
 import { LoginButton } from "@/components/login-button";
+import { WordPullUp } from "@/components/typing-animation";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useFarcasterAccount } from "@/lib/farcaster";
 
 const App = () => {
@@ -14,10 +15,21 @@ const App = () => {
 
   const { farcasterAccount, hasGivenAuthorization } = useFarcasterAccount();
 
-  if (!ready) return <Skeleton className="flex-1" />;
+  if (!ready) return null;
 
   if (!farcasterAccount) {
-    return <LoginButton />;
+    return (
+      <div className="flex w-full flex-1 flex-col items-center justify-center gap-y-6">
+        <div>
+          <WordPullUp words="Welcome to" className="text-center text-xl"></WordPullUp>
+          <AnimatedText
+            word="OnlyCast"
+            className="text-center text-5xl font-semibold text-primary"
+          />
+        </div>
+        <LoginButton />
+      </div>
+    );
   }
 
   if (!hasGivenAuthorization) {
