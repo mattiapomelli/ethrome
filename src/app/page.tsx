@@ -12,7 +12,7 @@ const App = () => {
   const { logout, ready } = usePrivy();
   const { requestFarcasterSignerFromWarpcast } = useFarcasterSigner();
 
-  const { farcasterAccount } = useFarcasterAccount();
+  const { farcasterAccount, hasGivenAuthorization } = useFarcasterAccount();
 
   if (!ready) return <Skeleton className="flex-1" />;
 
@@ -20,7 +20,7 @@ const App = () => {
     return <LoginButton />;
   }
 
-  if (!farcasterAccount.signerPublicKey) {
+  if (!hasGivenAuthorization) {
     return (
       <div className="flex size-full flex-1 items-center justify-center gap-2">
         <Button variant="outline" onClick={() => requestFarcasterSignerFromWarpcast()}>

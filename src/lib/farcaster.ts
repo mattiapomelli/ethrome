@@ -21,7 +21,9 @@ export const useFarcasterAccount = () => {
     (account: { type: string }) => account.type === "farcaster",
   ) as FarcasterWithMetadata | undefined;
 
-  return { farcasterAccount };
+  const hasGivenAuthorization = !!farcasterAccount?.signerPublicKey;
+
+  return { farcasterAccount, hasGivenAuthorization };
 };
 
 export const useSubmitCastMutation = () => {
