@@ -84,7 +84,7 @@ const CreatePage = () => {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-md flex-col gap-y-4 px-8 py-4">
+    <div className="mx-auto flex w-full max-w-md flex-col gap-y-4 px-8 py-4 pb-[5.5rem]">
       <h1 className="text-4xl font-semibold">Let's cast</h1>
       <Form {...form}>
         <Card className="w-full overflow-hidden bg-background">

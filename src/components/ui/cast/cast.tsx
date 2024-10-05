@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { HTMLAttributes } from "react";
+import { Hex } from "viem";
 
+import { AddressAvatar } from "@/components/address-avatar";
 import { cn } from "@/lib/utils";
 
-type UserInfo = {
-  avatarImgSrc: string;
+export type UserInfo = {
+  address: Hex;
   username: string;
 };
 
@@ -28,17 +30,13 @@ export const Cast = ({ userInfo, imgSrc, description, className, ...props }: Cas
       {userInfo && (
         <div className="absolute inset-x-2 bottom-20 z-20 flex max-w-md flex-col gap-y-2 rounded-sm bg-black/20 p-2 backdrop-blur-sm">
           <div className="flex items-center justify-start gap-x-2">
-            <Image
-              src={userInfo.avatarImgSrc}
-              alt={`${userInfo.username} profile image`}
-              className="size-6 rounded-full"
-              width={24}
-              height={24}
-            />
+            <AddressAvatar address={userInfo.address} />
             <h2 className="text-sm font-semibold">{userInfo.username}</h2>
           </div>
 
-          <p className="max-h-10 overflow-y-scroll text-sm font-light">{description}</p>
+          {description && (
+            <p className="max-h-10 overflow-y-scroll text-sm font-light">{description}</p>
+          )}
         </div>
       )}
 

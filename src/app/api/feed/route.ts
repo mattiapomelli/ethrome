@@ -1,7 +1,7 @@
+import { CastWithInteractions } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import { NextResponse } from "next/server";
 
 import { neynarClient } from "@/lib/neynar";
-import { CastWithInteractions } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import { RerankedCast } from "@/lib/types";
 
 export async function GET(req: Request) {
@@ -22,34 +22,36 @@ export async function GET(req: Request) {
 
   let casts = result.casts;
 
-    // console.log(casts.map((cast) => cast.hash));
+  // console.log(casts.map((cast) => cast.hash));
 
-    if (!process.env.MBD_API_KEY) {
-        return NextResponse.json({ error: "MBD_API_KEY is not set" }, { status: 500 });
-    }
+  if (!process.env.MBD_API_KEY) {
+    return NextResponse.json({ error: "MBD_API_KEY is not set" }, { status: 500 });
+  }
 
-    const mbdResult = await fetch(`https://api.mbd.xyz/v1/farcaster/casts/feed/reranked`, {
-        headers: {
-            "x-api-key": process.env.MBD_API_KEY,
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-            user_id: viewerFid,
-            items_list: ["0xd3f845bc6250f3c50f911d7c99effee2b1cf6b9f", ...casts.map((cast) => (cast.hash))],
-            return_metadata: true,
-        }),
-    });
+  const mbdResult = await fetch(`https://api.mbd.xyz/v1/farcaster/casts/feed/reranked`, {
+    headers: {
+      "x-api-key": process.env.MBD_API_KEY,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify({
+      user_id: viewerFid,
+      items_list: ["0xd3f845bc6250f3c50f911d7c99effee2b1cf6b9f", ...casts.map((cast) => cast.hash)],
+      return_metadata: true,
+    }),
+  });
 
-    const mbdData = await mbdResult.json();
-    // console.log(mbdData);
+  const mbdData = await mbdResult.json();
+  // console.log(mbdData);
 
-    const rerankedCasts: CastWithInteractions[] = mbdData.body.map((mbdItem: RerankedCast) => {
-        return casts.find(cast => cast.hash === mbdItem.item_id);
-    }).filter(Boolean);
+  const rerankedCasts: CastWithInteractions[] = mbdData.body
+    .map((mbdItem: RerankedCast) => {
+      return casts.find((cast) => cast.hash === mbdItem.item_id);
+    })
+    .filter(Boolean);
 
-    // console.log(rerankedCasts.map((cast) => cast.hash));
+  // console.log(rerankedCasts.map((cast) => cast.hash));
 
-    return NextResponse.json(rerankedCasts, { status: 200 });
+  return NextResponse.json(rerankedCasts, { status: 200 });
 }
