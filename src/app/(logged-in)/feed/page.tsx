@@ -10,6 +10,15 @@ const isEmbedUrl = (embed: EmbeddedCast): embed is EmbedUrl => {
   return (embed as EmbedUrl)?.url !== undefined;
 };
 
+const isValidUrl = (url: string): boolean => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 const FeedPage = () => {
   const { data: casts, isLoading } = useCasts();
 
@@ -18,7 +27,7 @@ const FeedPage = () => {
     if (!isEmbedUrl(firstEmbed)) return false;
 
     const secondEmbed = cast.embeds[1];
-    if (!isEmbedUrl(secondEmbed)) return false;
+    if (!isEmbedUrl(secondEmbed) || !isValidUrl(secondEmbed.url)) return false;
 
     return true;
   }) as CastWithEmbedUrl[];
