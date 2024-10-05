@@ -1,12 +1,23 @@
+import { useSignMessage } from "@privy-io/react-auth";
 import { useQuery } from "@tanstack/react-query";
+import { useAccount } from "wagmi";
 
 import { getDataProtectorSharing } from "@/lib/iexec";
+import { deriveAccountFromUid } from "@/lib/utils";
 
 export function useGetContent(taskId: string) {
+  const { address } = useAccount();
+  const { signMessage } = useSignMessage();
+
   return useQuery({
     queryKey: ["content", taskId],
     queryFn: async () => {
-      const dataProtectorSharing = getDataProtectorSharing();
+      if (!address) throw new Error("No address found");
+
+      const signature = await signMessage(address);
+      const privateKey = deriveAccountFromUid(signature);
+
+      const dataProtectorSharing = getDataProtectorSharing(privateKey);
 
       const taskResult = await dataProtectorSharing.getResultFromCompletedTask({
         taskId,
@@ -19,5 +30,6 @@ export function useGetContent(taskId: string) {
       const decodedText = new TextDecoder().decode(taskResult.result);
       return decodedText;
     },
+    enabled: !!address,
   });
 }

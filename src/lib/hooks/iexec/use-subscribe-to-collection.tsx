@@ -1,4 +1,6 @@
+import { useSignMessage } from "@privy-io/react-auth";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import { useAccount } from "wagmi";
 
 import { TransactionLinkButton } from "@/components/transaction-link-button";
 import { buttonVariants } from "@/components/ui/button";
@@ -9,7 +11,7 @@ import {
   getDataProtectorSharing,
   PROTECTED_DATA_DELIVERY_DAPP_ADDRESS,
 } from "@/lib/iexec";
-import { cn } from "@/lib/utils";
+import { cn, deriveAccountFromUid } from "@/lib/utils";
 
 type RentDataParams = {
   protectedDataAddress: string;
@@ -24,15 +26,18 @@ export function useSubscribeToCollection(
     "mutationFn"
   >,
 ) {
+  const { address } = useAccount();
+  const { signMessage } = useSignMessage();
+
   return useMutation({
     mutationFn: async ({ protectedDataAddress, price, duration, collectionId }: RentDataParams) => {
-      console.log("protectedDataAddress", protectedDataAddress);
-      console.log("price", price);
-      console.log("duration", duration);
-      console.log("collectionId", collectionId);
+      if (!address) throw new Error("No address found");
+
+      const signature = await signMessage(address);
+      const privateKey = deriveAccountFromUid(signature);
 
       // const dataProtectorCore = getDataProtectorCore();
-      const dataProtectorSharing = getDataProtectorSharing();
+      const dataProtectorSharing = getDataProtectorSharing(privateKey);
 
       // const pricingParams = await dataProtectorSharing.getProtectedDataPricingParams({
       //   protectedData: protectedDataAddress,
@@ -128,11 +133,6 @@ export function useSubscribeToCollection(
       };
     },
     onError(error, variables, context) {
-      console.log("Cause: ", error.cause);
-      // @ts-ignore
-      console.log("Error Cause: ", error.errorCause);
-      console.log("Error: ", error.message);
-
       toast({
         title: "Rent data failed!",
         description: error.message,

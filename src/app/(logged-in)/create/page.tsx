@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Paperclip } from "lucide-react";
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { useChainId } from "wagmi";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useSetDataForRenting } from "@/lib/hooks/iexec/use-set-data-for-renting";
 
 const formSchema = z.object({
   text: z.string().min(1, "Text is required"),
@@ -24,6 +26,9 @@ const CreatePage = () => {
   const [animationParentPicture] = useAutoAnimate();
   const [animationParentPreview] = useAutoAnimate();
 
+  const chainId = useChainId();
+  console.log("chainId", chainId);
+
   const [picturePreview, setPicturePreview] = useState<string | null>(null);
   const [previewPreview, setPreviewPreview] = useState<string | null>(null);
 
@@ -35,8 +40,25 @@ const CreatePage = () => {
     },
   });
 
+  const { mutate: setDataForRenting, isPending: isSellPending } = useSetDataForRenting({
+    onSuccess({ protectedDataAddress, collectionId }) {
+      console.log("Protected Data Address", protectedDataAddress);
+      console.log("Collection Id", collectionId);
+    },
+  });
+
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+    console.log("data", data);
+
+    setDataForRenting({
+      price: 0,
+      duration: 60 * 60 * 24 * 30, // 30 days
+      data: {
+        // A binary "file" field must be used if you use the app provided by iExec
+        file: new TextEncoder().encode("Ciao!"),
+      },
+      name: "Test Data",
+    });
   };
 
   const handleFileChange = (
@@ -208,7 +230,8 @@ const CreatePage = () => {
                 type="submit"
                 size="sm"
                 className="min-w-32"
-                disabled={!form.formState.isValid}
+                disabled={!form.formState.isValid || isSellPending}
+                loading={isSellPending}
               >
                 Cast
               </Button>

@@ -1,5 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
+import CryptoJS from "crypto-js";
 import { twMerge } from "tailwind-merge";
+import { toHex } from "viem";
+// import { privateKeyToAccount } from "viem/accounts";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -35,4 +38,17 @@ export function copyToClipboard(str: string) {
   }
 
   return clipboard.writeText(str);
+}
+
+export function deriveAccountFromUid(uid: string) {
+  const hashedString = CryptoJS.SHA256(uid).toString();
+
+  const buffer = Buffer.from(hashedString, "hex");
+  const privateKey = toHex(buffer);
+
+  console.log("Private Key: ", privateKey);
+
+  return privateKey;
+
+  // return privateKeyToAccount(privateKey);
 }

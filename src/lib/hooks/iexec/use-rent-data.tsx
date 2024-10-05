@@ -1,4 +1,6 @@
+import { useSignMessage } from "@privy-io/react-auth";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import { useAccount } from "wagmi";
 
 import { TransactionLinkButton } from "@/components/transaction-link-button";
 import { buttonVariants } from "@/components/ui/button";
@@ -9,7 +11,7 @@ import {
   getDataProtectorSharing,
   PROTECTED_DATA_DELIVERY_DAPP_ADDRESS,
 } from "@/lib/iexec";
-import { cn } from "@/lib/utils";
+import { cn, deriveAccountFromUid } from "@/lib/utils";
 
 type RentDataParams = {
   protectedDataAddress: string;
@@ -23,10 +25,18 @@ export function useRentData(
     "mutationFn"
   >,
 ) {
+  const { address } = useAccount();
+  const { signMessage } = useSignMessage();
+
   return useMutation({
     mutationFn: async ({ protectedDataAddress, price, duration }: RentDataParams) => {
+      if (!address) throw new Error("No address found");
+
+      const signature = await signMessage(address);
+      const privateKey = deriveAccountFromUid(signature);
+
       // const dataProtectorCore = getDataProtectorCore();
-      const dataProtectorSharing = getDataProtectorSharing();
+      const dataProtectorSharing = getDataProtectorSharing(privateKey);
 
       // const pricingParams = await dataProtectorSharing.getProtectedDataPricingParams({
       //   protectedData: protectedDataAddress,

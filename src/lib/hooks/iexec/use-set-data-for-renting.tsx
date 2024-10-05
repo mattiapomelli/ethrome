@@ -1,5 +1,9 @@
+import { useSignMessage } from "@privy-io/react-auth";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+// import { createWalletClient, http } from "viem";
+import { useAccount } from "wagmi";
 
+// import { bellecour } from "@/app/providers";
 import { TransactionLinkButton } from "@/components/transaction-link-button";
 import { BELLECOUR_CHAIN_ID } from "@/lib/chains";
 import { toast } from "@/lib/hooks/use-toast";
@@ -8,6 +12,7 @@ import {
   getDataProtectorSharing,
   PROTECTED_DATA_DELIVERY_WHITELIST_ADDRESS,
 } from "@/lib/iexec";
+import { deriveAccountFromUid } from "@/lib/utils";
 
 type SetDataForRentingParams = {
   data: Record<string, any>;
@@ -28,6 +33,9 @@ export function useSetDataForRenting(
     "mutationFn"
   >,
 ) {
+  const { address } = useAccount();
+  const { signMessage } = useSignMessage();
+
   return useMutation({
     mutationFn: async ({
       data,
@@ -36,8 +44,13 @@ export function useSetDataForRenting(
       duration,
       collectionId: _collectionId,
     }: SetDataForRentingParams) => {
-      const dataProtectorCore = getDataProtectorCore();
-      const dataProtectorSharing = getDataProtectorSharing();
+      if (!address) throw new Error("No address found");
+
+      const signature = await signMessage(address);
+      const privateKey = deriveAccountFromUid(signature);
+
+      const dataProtectorCore = getDataProtectorCore(privateKey);
+      const dataProtectorSharing = getDataProtectorSharing(privateKey);
 
       // -------- Create Collection --------
       let collectionId: number;
@@ -132,7 +145,8 @@ export function useSetDataForRenting(
       };
     },
     onError(error, variables, context) {
-      console.log("Error: ", error.message);
+      console.log("Error Cause: ", error.cause);
+      console.log("Error Message: ", error.message);
 
       toast({
         title: "Set data for renting failed!",
