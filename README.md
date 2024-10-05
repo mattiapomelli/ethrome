@@ -37,7 +37,7 @@ Alphacast is fully open source. If you wish, you can deploy and host the client 
 1. Clone the Github repo: `git clone https://github.com/mattiapomelli/ethrome.git`
 2. Install the dependencies: `cd ethrome && npm install`
 3. Build and run the project: `npm run build && npm run start`
-4. Visit the dApp running locally at [https://localhost:3000](https://localhost:3000)
+4. Visit the dApp running locally at [http://localhost:3000](http://localhost:3000)
 5. (Optional) Deploy and host the dApp using your suite (vercel, heroku etc.)
  
 ### Possible Extensions
