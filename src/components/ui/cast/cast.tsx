@@ -13,11 +13,10 @@ export type UserInfo = {
 type CastProps = {
   userInfo?: UserInfo;
   imgSrc: string;
-  description?: string;
   className?: string;
 } & HTMLAttributes<HTMLDivElement>;
 
-export const Cast = ({ userInfo, imgSrc, description, className, ...props }: CastProps) => {
+export const Cast = ({ userInfo, imgSrc, className, ...props }: CastProps) => {
   return (
     <div
       className={cn(
@@ -28,15 +27,11 @@ export const Cast = ({ userInfo, imgSrc, description, className, ...props }: Cas
     >
       {/* User Information */}
       {userInfo && (
-        <div className="absolute inset-x-2 bottom-20 z-20 flex max-w-md flex-col gap-y-2 rounded-sm bg-black/20 p-2 backdrop-blur-sm">
+        <div className="absolute inset-x-2 bottom-[5.5rem] z-20 flex max-w-md flex-col gap-y-2 rounded-xl bg-foreground/10 px-2.5 py-2 backdrop-blur-sm">
           <div className="flex items-center justify-start gap-x-2">
             <AddressAvatar address={userInfo.address} />
             <h2 className="text-sm font-semibold">{userInfo.username}</h2>
           </div>
-
-          {description && (
-            <p className="max-h-10 overflow-y-scroll text-sm font-light">{description}</p>
-          )}
         </div>
       )}
 

@@ -23,7 +23,7 @@ export const Dock = ({ items, className }: DockProps) => {
     <div className="fixed inset-x-5 bottom-5 z-50">
       <div
         className={cn(
-          "mx-auto flex w-fit items-center justify-center gap-x-4 rounded-full bg-foreground/10 px-3 py-2 backdrop-blur-sm",
+          "mx-auto flex w-fit items-center justify-center gap-x-4 rounded-xl bg-foreground/10 px-3 py-2 backdrop-blur-sm",
           className,
         )}
       >
