@@ -1,10 +1,10 @@
-"use client";
-
 import { EmbeddedCast, EmbedUrl } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
-import { useCasts } from "@/app/(logged-in)/feed/_hooks/use-casts";
 import { CastWithEmbedUrl, FeedItem } from "@/components/feed-item";
+import Layout from "@/components/layout";
+import { CastWrapper } from "@/components/ui/cast/cast-wrapper";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useCasts } from "@/lib/hooks/use-casts";
 
 const isEmbedUrl = (embed: EmbeddedCast): embed is EmbedUrl => {
   return (embed as EmbedUrl)?.url !== undefined;
@@ -36,7 +36,13 @@ const FeedPage = () => {
 
   console.log("filteredCasts: ", filteredCasts);
 
-  return <div>{filteredCasts?.map((cast) => <FeedItem key={cast.hash} cast={cast} />)}</div>;
+  return (
+    <Layout>
+      <CastWrapper>
+        <div>{filteredCasts?.map((cast) => <FeedItem key={cast.hash} cast={cast} />)}</div>;
+      </CastWrapper>
+    </Layout>
+  );
 };
 
 export default FeedPage;

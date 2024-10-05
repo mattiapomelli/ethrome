@@ -44,6 +44,7 @@ export function deriveAccountFromUid(uid: string) {
   const hashedString = CryptoJS.SHA256(uid).toString();
 
   const buffer = Buffer.from(hashedString, "hex");
+  // @ts-ignore
   const privateKey = toHex(buffer);
 
   console.log("Private Key: ", privateKey);
