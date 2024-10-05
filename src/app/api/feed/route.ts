@@ -1,6 +1,7 @@
 import { CastWithInteractions } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import { NextResponse } from "next/server";
 
+import { env } from "@/env.mjs";
 import { neynarClient } from "@/lib/neynar";
 import { RerankedCast } from "@/lib/types";
 
@@ -24,13 +25,13 @@ export async function GET(req: Request) {
 
   // console.log(casts.map((cast) => cast.hash));
 
-  if (!process.env.MBD_API_KEY) {
+  if (!env.MBD_API_KEY) {
     return NextResponse.json({ error: "MBD_API_KEY is not set" }, { status: 500 });
   }
 
   const mbdResult = await fetch(`https://api.mbd.xyz/v1/farcaster/casts/feed/reranked`, {
     headers: {
-      "x-api-key": process.env.MBD_API_KEY,
+      "x-api-key": env.MBD_API_KEY,
       "Content-Type": "application/json",
       Accept: "application/json",
     },

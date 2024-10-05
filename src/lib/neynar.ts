@@ -1,7 +1,5 @@
 import { NeynarAPIClient } from "@neynar/nodejs-sdk";
 
-if (!process.env.NEYNAR_API_KEY) {
-  throw new Error("Make sure you set NEYNAR_API_KEY in your .env file");
-}
+import { env } from "@/env.mjs";
 
-export const neynarClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
+export const neynarClient = new NeynarAPIClient(env.NEYNAR_API_KEY);
