@@ -21,13 +21,13 @@ export const Dock = ({ items, className }: DockProps) => {
     <div className="fixed inset-x-5 bottom-5 z-50">
       <div
         className={cn(
-          "mx-auto flex w-fit items-center justify-center gap-x-4 rounded-full bg-primary-foreground/10 px-3 py-2 backdrop-blur-sm",
+          "mx-auto flex w-fit items-center justify-center gap-x-4 rounded-full bg-foreground/10 px-3 py-2 backdrop-blur-sm",
           className,
         )}
       >
         {items.map(({ title, icon, href }) => (
           <Link key={title} href={href}>
-            <div className="relative flex aspect-square items-center justify-center rounded-full p-2 transition-colors duration-300 ease-out hover:bg-white/10 dark:hover:bg-neutral-800">
+            <div className="relative flex aspect-square items-center justify-center rounded-full p-2 transition-colors duration-300 ease-out hover:bg-foreground/20">
               {icon}
             </div>
           </Link>
