@@ -24,7 +24,7 @@ AlphaCast gives users an engaging TikTok like feed for discovering creators and 
 ### How to use
 AlphaCast is a deployed dApp that you can accessed at [alphacast.vercel.app](https://alphacast.vercel.app). 
 
-Simply:
+**Steps:**
 1. Visit the [website](https://alphacast.vercel.app)
 2. Scan the QR code to link your Farcaster account
 3. Start scrolling the feed and purchasing content
@@ -33,7 +33,7 @@ Simply:
 ### Deploy it yourself
 Alphacast is fully open source. If you wish, you can deploy and host the client yourself.
 
-Steps:
+**Steps:**
 1. Clone the Github repo: `git clone https://github.com/mattiapomelli/ethrome.git`
 2. Install the dependencies: `cd ethrome && npm install`
 3. Build and run the project: `npm run build && npm run start`
