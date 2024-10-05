@@ -11,7 +11,7 @@ export type SiteConfig = {
 export const siteConfig: SiteConfig = {
   name: "OnlyCast",
   description: "You pay you see",
-  url: "http://localhost:3000",
+  url: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000",
   ogImage: "https://localhost:3000/og.png",
   links: {
     twitter: "",
