@@ -1,18 +1,20 @@
 import { useSignMessage } from "@privy-io/react-auth";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-// import { createWalletClient, http } from "viem";
 import { useAccount } from "wagmi";
 
 // import { bellecour } from "@/app/providers";
 import { TransactionLinkButton } from "@/components/transaction-link-button";
+import { buttonVariants } from "@/components/ui/button";
 import { BELLECOUR_CHAIN_ID } from "@/lib/chains";
+import { farcasterClient, useFarcasterAccount, usePrivySigner } from "@/lib/farcaster";
 import { toast } from "@/lib/hooks/use-toast";
 import {
   getDataProtectorCore,
   getDataProtectorSharing,
   PROTECTED_DATA_DELIVERY_WHITELIST_ADDRESS,
 } from "@/lib/iexec";
-import { deriveAccountFromUid } from "@/lib/utils";
+import { PrivateCastData } from "@/lib/types";
+import { cn, deriveAccountFromUid } from "@/lib/utils";
 
 type SetDataForRentingParams = {
   data: Record<string, any>;
@@ -20,6 +22,7 @@ type SetDataForRentingParams = {
   price: number;
   duration: number;
   collectionId?: number | null;
+  previewUrl: string;
 };
 
 type SetDataForRentingResponse = {
@@ -35,14 +38,17 @@ export function useSetDataForRenting(
 ) {
   const { address } = useAccount();
   const { signMessage } = useSignMessage();
+  const { farcasterAccount } = useFarcasterAccount();
+  const { privySigner } = usePrivySigner();
 
   return useMutation({
     mutationFn: async ({
       data,
       name,
-      // price,
+      price,
       duration,
       collectionId: _collectionId,
+      previewUrl,
     }: SetDataForRentingParams) => {
       if (!address) throw new Error("No address found");
 
@@ -135,6 +141,48 @@ export function useSetDataForRenting(
             chainId={BELLECOUR_CHAIN_ID}
             txnHash={setProtectedDataToRentingResponse.txHash as `0x${string}`}
           />
+        ),
+        variant: "default",
+      });
+
+      // -------- Post To Farcaster --------
+      if (!farcasterAccount?.fid) {
+        throw new Error("No farcaster account");
+      }
+
+      const embed: PrivateCastData = {
+        protectedDataAddress: protectedData.address,
+        price,
+        duration,
+      };
+
+      const cast: Parameters<typeof farcasterClient.submitCast>[0] = {
+        text: name,
+        embeds: [
+          {
+            url: JSON.stringify(embed),
+          },
+          {
+            url: previewUrl,
+          },
+        ],
+      };
+      const castResult = await farcasterClient.submitCast(cast, farcasterAccount.fid, privySigner);
+
+      console.log("castResult", castResult);
+
+      toast({
+        title: "Posted to Farcaster",
+        description: "Successfully posted to Farcaster.",
+        action: (
+          <a
+            href={`https://warpcast.com/${farcasterAccount.username}/${castResult.hash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(buttonVariants({ size: "sm" }), "text-sm", "bg-purple-500")}
+          >
+            See on Farcaster
+          </a>
         ),
         variant: "default",
       });

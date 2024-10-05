@@ -14,6 +14,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useSetDataForRenting } from "@/lib/hooks/iexec/use-set-data-for-renting";
+import { uploadFile } from "@/lib/supabase/storage";
 import { convertFileToBase64 } from "@/lib/utils";
 
 const formSchema = z.object({
@@ -54,6 +55,11 @@ const CreatePage = () => {
     const image = (await convertFileToBase64(data.picture)) as string;
     // const preview = (await convertFileToBase64(data.preview)) as string;
 
+    const previewUrl = await uploadFile(data.preview);
+    if (!previewUrl) return;
+
+    console.log("previewUrl", previewUrl);
+
     setDataForRenting({
       price: data.price,
       duration: 60 * 60 * 24 * 30, // 30 days
@@ -62,6 +68,7 @@ const CreatePage = () => {
         file: new TextEncoder().encode(image),
       },
       name: data.text,
+      previewUrl,
     });
   };
 
