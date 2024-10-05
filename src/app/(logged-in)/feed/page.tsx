@@ -31,6 +31,7 @@ const FeedPage = () => {
     });
 
     if (!embeds[0]?.previewImg) return null;
+
     const userInfo: UserInfo = {
       address: cast.author.custody_address as Hex,
       username: cast.text,

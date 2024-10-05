@@ -1,4 +1,4 @@
-import { Home, Link2Off, Plus } from "lucide-react";
+import { Home, Plus, User } from "lucide-react";
 import { ReactNode } from "react";
 
 import { Dock } from "@/components/ui/dock";
@@ -16,7 +16,7 @@ const links = [
   },
   {
     title: "Disconnect",
-    icon: <Link2Off className="size-4" />,
+    icon: <User className="size-4" />,
     href: "#",
   },
 ];
