@@ -33,6 +33,8 @@ export const FeedItem: React.FC<FeedItemProps> = ({ cast }) => {
 
   const { data: savedContent } = useGetContent(protectedDataAddress);
 
+  console.log("savedContent: ", savedContent);
+
   const userInfo: UserInfo = {
     address: cast.author.custody_address as Hex,
     username: cast.text,

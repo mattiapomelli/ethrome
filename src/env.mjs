@@ -4,6 +4,7 @@ import { z } from "zod";
 export const env = createEnv({
   server: {
     NEYNAR_API_KEY: z.string().min(1),
+    FARCASTER_DEVELOPER_MNEMONIC: z.string().min(1),
     MBD_API_KEY: z.string().min(1),
   },
   client: {
@@ -20,6 +21,7 @@ export const env = createEnv({
     NEXT_PUBLIC_SUPABASE_KEY: process.env.NEXT_PUBLIC_SUPABASE_KEY,
     MBD_API_KEY: process.env.MBD_API_KEY,
     NEYNAR_API_KEY: process.env.NEYNAR_API_KEY,
+    FARCASTER_DEVELOPER_MNEMONIC: process.env.FARCASTER_DEVELOPER_MNEMONIC,
   },
   skipValidation: process.env.SKIP_ENV_VALIDATION === "true",
 });

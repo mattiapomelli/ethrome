@@ -1,3 +1,5 @@
+"use client";
+
 import { EmbeddedCast, EmbedUrl } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
 import { CastWithEmbedUrl, FeedItem } from "@/components/feed-item";

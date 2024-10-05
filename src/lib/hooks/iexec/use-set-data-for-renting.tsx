@@ -1,11 +1,13 @@
+import { PostCastResponseCast } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import { useSignMessage } from "@privy-io/react-auth";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import ky from "ky";
 import { useAccount } from "wagmi";
 
 import { TransactionLinkButton } from "@/components/transaction-link-button";
 import { buttonVariants } from "@/components/ui/button";
 import { BELLECOUR_CHAIN_ID } from "@/lib/chains";
-import { farcasterClient, useFarcasterAccount, usePrivySigner } from "@/lib/farcaster";
+import { useFarcasterAccount } from "@/lib/farcaster";
 import { createEmbedUrl } from "@/lib/frames";
 import { toast } from "@/lib/hooks/use-toast";
 import {
@@ -39,7 +41,6 @@ export function useSetDataForRenting(
   const { address } = useAccount();
   const { signMessage } = useSignMessage();
   const { farcasterAccount } = useFarcasterAccount();
-  const { privySigner } = usePrivySigner();
 
   return useMutation({
     mutationFn: async ({
@@ -146,7 +147,7 @@ export function useSetDataForRenting(
       });
 
       // -------- Post To Farcaster --------
-      if (!farcasterAccount?.fid) {
+      if (!farcasterAccount) {
         throw new Error("No farcaster account");
       }
 
@@ -156,27 +157,43 @@ export function useSetDataForRenting(
         duration,
       };
 
-      const cast: Parameters<typeof farcasterClient.submitCast>[0] = {
-        text: name,
-        embeds: [
-          {
-            url: JSON.stringify(embed),
-          },
-          {
-            url: createEmbedUrl(previewUrl),
-          },
-        ],
-      };
-      const castResult = await farcasterClient.submitCast(cast, farcasterAccount.fid, privySigner);
+      const embeds = [
+        {
+          url: JSON.stringify(embed),
+        },
+        {
+          url: createEmbedUrl(previewUrl),
+        },
+      ];
 
-      console.log("castResult", castResult);
+      const signerUuid = localStorage.getItem("farcaster-signer-uuid");
+      const cast = await ky
+        .post("/api/cast", {
+          json: { signer_uuid: signerUuid, text: name, embeds },
+        })
+        .json<PostCastResponseCast>();
+
+      // const cast: Parameters<typeof farcasterClient.submitCast>[0] = {
+      //   text: name,
+      //   embeds: [
+      //     {
+      //       url: JSON.stringify(embed),
+      //     },
+      //     {
+      //       url: createEmbedUrl(previewUrl),
+      //     },
+      //   ],
+      // };
+      // const castResult = await farcasterClient.submitCast(cast, farcasterAccount.fid, privySigner);
+
+      console.log("castResult", cast);
 
       toast({
         title: "Posted to Farcaster",
         description: "Successfully posted to Farcaster.",
         action: (
           <a
-            href={`https://warpcast.com/${farcasterAccount.username}/${castResult.hash}`}
+            href={`https://warpcast.com/${farcasterAccount.username}/${cast.hash}`}
             target="_blank"
             rel="noopener noreferrer"
             className={cn(buttonVariants({ size: "sm" }), "text-sm", "bg-purple-500")}
