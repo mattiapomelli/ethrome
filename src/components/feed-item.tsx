@@ -5,6 +5,7 @@ import { Hex } from "viem";
 
 import { Cast, UserInfo } from "@/components/ui/cast/cast";
 import { Spinner } from "@/components/ui/spinner";
+import { extractPreviewUrl } from "@/lib/frames";
 import { useGetContent } from "@/lib/hooks/iexec/use-get-content";
 import { useRentData } from "@/lib/hooks/iexec/use-rent-data";
 import { cn } from "@/lib/utils";
@@ -21,7 +22,7 @@ export const FeedItem: React.FC<FeedItemProps> = ({ cast }) => {
   const [paidContent, setPaidContent] = useState<string | null>(null);
 
   const { protectedDataAddress, duration } = JSON.parse(cast.embeds[0].url);
-  const previewUrl = cast.embeds[1].url;
+  const previewUrl = extractPreviewUrl(cast.embeds[1].url);
 
   const { mutate: rentData, isPending } = useRentData({
     onSuccess({ content, taskId }) {
@@ -44,6 +45,8 @@ export const FeedItem: React.FC<FeedItemProps> = ({ cast }) => {
       duration,
     });
   };
+
+  if (!previewUrl) return null;
 
   return (
     <div className="relative">
