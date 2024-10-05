@@ -1,5 +1,5 @@
 ## AlphaCast
-The easiest way to share and monetize your content for your existing network. Alpha or otherwise ;)
+The easiest way to share and monetize your content to your existing network. Alpha or otherwise ;)
 
 -----
 AlphaCast is a **private, censorship resistant Farcaster client** that allows creators to **monetize their content** for their existing Farcaster network. 
