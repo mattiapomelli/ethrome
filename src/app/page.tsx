@@ -1,6 +1,8 @@
 "use client";
 
 import { useFarcasterSigner, usePrivy } from "@privy-io/react-auth";
+import { redirect } from "next/navigation";
+
 import { LoginButton } from "@/components/login-button";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -33,7 +35,7 @@ const App = () => {
     );
   }
 
-  return <div>Logged view</div>;
+  return redirect("/feed");
 };
 
 export default App;
