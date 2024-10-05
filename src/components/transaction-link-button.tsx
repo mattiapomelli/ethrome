@@ -15,7 +15,7 @@ export function TransactionLinkButton({ chainId, txnHash }: TransactionLinkButto
       rel="noopener noreferrer"
       className={cn(buttonVariants({ size: "sm" }), "text-sm")}
     >
-      See on Blockscout
+      See on Explorer
     </a>
   );
 }

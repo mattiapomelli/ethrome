@@ -9,7 +9,7 @@ import {
   PROTECTED_DATA_DELIVERY_WHITELIST_ADDRESS,
 } from "@/lib/iexec";
 
-type SetDataForRentingParams = {
+type SetDataToSubscriptionParams = {
   data: Record<string, any>;
   name: string;
   price: number;
@@ -17,14 +17,14 @@ type SetDataForRentingParams = {
   collectionId?: number | null;
 };
 
-type SetDataForRentingResponse = {
+type SetDataToSubscriptionResponse = {
   protectedDataAddress: string;
   collectionId: number;
 };
 
-export function useSetDataForRenting(
+export function useSetDataToSubscription(
   options?: Omit<
-    UseMutationOptions<SetDataForRentingResponse, Error, SetDataForRentingParams, unknown>,
+    UseMutationOptions<SetDataToSubscriptionResponse, Error, SetDataToSubscriptionParams, unknown>,
     "mutationFn"
   >,
 ) {
@@ -35,7 +35,7 @@ export function useSetDataForRenting(
       price,
       duration,
       collectionId: _collectionId,
-    }: SetDataForRentingParams) => {
+    }: SetDataToSubscriptionParams) => {
       const dataProtectorCore = getDataProtectorCore();
       const dataProtectorSharing = getDataProtectorSharing();
 
@@ -84,13 +84,13 @@ export function useSetDataForRenting(
       });
 
       // -------- Add Data To Collection --------
-      const addToCollectionResponse = await dataProtectorSharing.addToCollection({
+      const addToCollectionResult = await dataProtectorSharing.addToCollection({
         protectedData: protectedData.address,
         collectionId,
         addOnlyAppWhitelist: PROTECTED_DATA_DELIVERY_WHITELIST_ADDRESS,
       });
 
-      console.log("addToCollectionResponse", addToCollectionResponse);
+      console.log("addToCollectionResult", addToCollectionResult);
 
       toast({
         title: "Added to collection",
@@ -98,44 +98,59 @@ export function useSetDataForRenting(
         action: (
           <TransactionLinkButton
             chainId={BELLECOUR_CHAIN_ID}
-            txnHash={addToCollectionResponse.txHash as `0x${string}`}
+            txnHash={addToCollectionResult.txHash as `0x${string}`}
           />
         ),
         variant: "default",
       });
 
-      // -------- Set Protected Data To Renting --------
-      const setProtectedDataToRentingResponse =
-        await dataProtectorSharing.setProtectedDataToRenting({
-          protectedData: protectedData.address,
-          price,
-          duration,
-        });
+      // -------- Set Subscription Params --------
+      const setSubscriptionParamsResult = await dataProtectorSharing.setSubscriptionParams({
+        collectionId,
+        price,
+        duration,
+      });
 
-      console.log("setProtectedDataToRentingResponse", setProtectedDataToRentingResponse);
+      console.log("setSubscriptionParamsResult", setSubscriptionParamsResult);
 
       toast({
-        title: "Set protected data to renting",
-        description: "Successfully set protected data to renting.",
+        title: "Set subscription params",
+        description: "Successfully set subscription params.",
         action: (
           <TransactionLinkButton
             chainId={BELLECOUR_CHAIN_ID}
-            txnHash={setProtectedDataToRentingResponse.txHash as `0x${string}`}
+            txnHash={setSubscriptionParamsResult.txHash as `0x${string}`}
           />
         ),
         variant: "default",
       });
 
-      return {
-        protectedDataAddress: protectedData.address,
-        collectionId,
-      };
+      // -------- Set Protected Data To Subscription --------
+      const setToSubscriptionResult = await dataProtectorSharing.setProtectedDataToSubscription({
+        protectedData: protectedData.address,
+      });
+
+      console.log("setToSubscriptionResult", setToSubscriptionResult);
+
+      toast({
+        title: "Set protected data to subscription",
+        description: "Successfully set protected data to subscription.",
+        action: (
+          <TransactionLinkButton
+            chainId={BELLECOUR_CHAIN_ID}
+            txnHash={setToSubscriptionResult.txHash as `0x${string}`}
+          />
+        ),
+        variant: "default",
+      });
+
+      return { protectedDataAddress: protectedData.address, collectionId };
     },
     onError(error, variables, context) {
       console.log("Error: ", error.message);
 
       toast({
-        title: "Set data for renting failed!",
+        title: "Set data to subscription failed!",
         description: error.message,
         variant: "destructive",
       });

@@ -15,16 +15,22 @@ type RentDataParams = {
   protectedDataAddress: string;
   price: number;
   duration: number;
+  collectionId: number;
 };
 
-export function useRentData(
+export function useSubscribeToCollection(
   options?: Omit<
     UseMutationOptions<{ taskId: string; content: string }, Error, RentDataParams, unknown>,
     "mutationFn"
   >,
 ) {
   return useMutation({
-    mutationFn: async ({ protectedDataAddress, price, duration }: RentDataParams) => {
+    mutationFn: async ({ protectedDataAddress, price, duration, collectionId }: RentDataParams) => {
+      console.log("protectedDataAddress", protectedDataAddress);
+      console.log("price", price);
+      console.log("duration", duration);
+      console.log("collectionId", collectionId);
+
       // const dataProtectorCore = getDataProtectorCore();
       const dataProtectorSharing = getDataProtectorSharing();
 
@@ -38,21 +44,21 @@ export function useRentData(
       // }
 
       // -------- Rent Protected Data --------
-      const rentResult = await dataProtectorSharing.rentProtectedData({
-        protectedData: protectedDataAddress,
+      const subscribeResult = await dataProtectorSharing.subscribeToCollection({
+        collectionId,
         price,
         duration,
       });
 
-      console.log("rentResult", rentResult);
+      console.log("subscribeResult", subscribeResult);
 
       toast({
-        title: "Rent protected data",
-        description: "Successfully rented protected data.",
+        title: "Subscribed to collection",
+        description: "Successfully subscribed to collection.",
         action: (
           <TransactionLinkButton
             chainId={BELLECOUR_CHAIN_ID}
-            txnHash={rentResult.txHash as `0x${string}`}
+            txnHash={subscribeResult.txHash as `0x${string}`}
           />
         ),
         variant: "default",
@@ -122,6 +128,9 @@ export function useRentData(
       };
     },
     onError(error, variables, context) {
+      console.log("Cause: ", error.cause);
+      // @ts-ignore
+      console.log("Error Cause: ", error.errorCause);
       console.log("Error: ", error.message);
 
       toast({
