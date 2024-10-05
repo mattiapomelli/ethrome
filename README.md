@@ -19,7 +19,7 @@ This model **gives creators full control of the sharing of their content.** Alph
 ### For Consumers
 Users can easily sign into AlphaCast with their Farcaster accounts using [Privy](https://www.privy.io/). This lets them **import their existing network** and gives them a **seamless onboarding experience.** 
 
-AlphaCast gives users an engaging TikTok like feed for discovering creators and content. We rerank posts using ['mbd](mbd.xyz) to **personalize the user's feed** based on their interests and interaction history. Each time a user makes a purchase, their feed will be curated to show them similar content in the future.
+AlphaCast gives users an engaging TikTok like feed for discovering creators and content. We rerank posts using ['mbd](https://mbd.xyz) to **personalize the user's feed** based on their interests and interaction history. Each time a user makes a purchase, their feed will be curated to show them similar content in the future.
 
 ### How to use
 AlphaCast is a deployed dApp that you can accessed at [alphacast.vercel.app](https://alphacast.vercel.app). 
