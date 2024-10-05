@@ -36,7 +36,3 @@ export function copyToClipboard(str: string) {
 
   return clipboard.writeText(str);
 }
-
-export function getAddressExplorerLink(address: string) {
-  return `https://etherscan.io/address/${address}`;
-}

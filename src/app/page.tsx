@@ -6,19 +6,14 @@ import { Button } from "@/components/ui/button";
 import { useAddDataToCollection } from "@/lib/hooks/iexec/use-add-data-to-collection";
 import { useConsumeData } from "@/lib/hooks/iexec/use-consume-data";
 import { useCreateCollection } from "@/lib/hooks/iexec/use-create-collection";
-import { useGetContent } from "@/lib/hooks/iexec/use-get-content";
 import { useProtectData } from "@/lib/hooks/iexec/use-protect-data";
 import { useRentData } from "@/lib/hooks/iexec/use-rent-data";
 import { useSetDataForRenting } from "@/lib/hooks/iexec/use-set-data-for-renting";
 
 export default function Home() {
-  const [protectedDataAddress, setProtectedDataAddress] = useState<string | null>(
-    "0xdDc123a50bb45861c3B2EC6717A374cAC17C6e06",
-  );
+  const [protectedDataAddress, setProtectedDataAddress] = useState<string | null>(null);
   const [collectionId, setCollectionId] = useState<number | null>(null);
-  const [taskId, setTaskId] = useState<string | null>(
-    "0xf8763c2dde21337774fcb526b64a9f77c9d741cd8de2871144a4089b36e9edd6",
-  );
+  const [taskId, setTaskId] = useState<string | null>();
 
   const { mutate: protectData, isPending: isProtectingData } = useProtectData({
     onSuccess(data) {
@@ -59,10 +54,6 @@ export default function Home() {
       console.log("Result", text);
     },
   });
-
-  const { data: content } = useGetContent(
-    "0xf8763c2dde21337774fcb526b64a9f77c9d741cd8de2871144a4089b36e9edd6",
-  );
 
   const onProtectData = async () => {
     protectData({
@@ -120,7 +111,7 @@ export default function Home() {
       <div>Protected Data Address: {protectedDataAddress}</div>
       <div>Collection Id: {collectionId}</div>
       <div>Task Id: {taskId}</div>
-      <div>Content: {content}</div>
+      {/* <div>Content: {content}</div> */}
       <div className="flex items-center gap-2">
         <Button onClick={onProtectData} loading={isProtectingData} disabled={isProtectingData}>
           Protect Data

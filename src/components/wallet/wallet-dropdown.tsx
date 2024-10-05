@@ -10,7 +10,9 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { copyToClipboard, getAddressExplorerLink } from "@/lib/utils";
+import { BELLECOUR_CHAIN_ID } from "@/lib/chains";
+import { getExplorerAddressUrl } from "@/lib/explorer";
+import { copyToClipboard } from "@/lib/utils";
 
 interface WalletDropdownMenuProps {
   address: `0x${string}`;
@@ -33,7 +35,11 @@ export const WalletDropdownMenu = ({ address }: WalletDropdownMenuProps) => {
           Copy address
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <a href={getAddressExplorerLink(address)} target="_blank" rel="noopener noreferrer">
+          <a
+            href={getExplorerAddressUrl(BELLECOUR_CHAIN_ID, address)}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <ExternalLink className="mr-2 size-4" />
             See in explorer
           </a>
