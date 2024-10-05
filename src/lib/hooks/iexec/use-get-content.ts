@@ -5,14 +5,17 @@ import { useAccount } from "wagmi";
 import { getDataProtectorSharing } from "@/lib/iexec";
 import { deriveAccountFromUid } from "@/lib/utils";
 
-export function useGetContent(taskId: string) {
+export function useGetContent(protectedDataAddress: string) {
   const { address } = useAccount();
   const { signMessage } = useSignMessage();
 
   return useQuery({
-    queryKey: ["content", taskId],
+    queryKey: ["content", protectedDataAddress],
     queryFn: async () => {
       if (!address) throw new Error("No address found");
+
+      const taskId = localStorage.getItem(`task-id-${protectedDataAddress}`);
+      if (!taskId) return null;
 
       const signature = await signMessage(address);
       const privateKey = deriveAccountFromUid(signature);

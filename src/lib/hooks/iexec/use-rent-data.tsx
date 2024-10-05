@@ -78,8 +78,8 @@ export function useRentData(
 
           if (status.title === "CONSUME_TASK" && !status.isDone) {
             toast({
-              title: "Consuming protected data",
-              description: "Successfully consuming protected data.",
+              title: "Started to consume protected data",
+              description: "Consuming protected data.",
               action: (
                 <a
                   href={`https://explorer.iex.ec/bellecour/task/${status.payload?.taskId}`}
@@ -96,7 +96,7 @@ export function useRentData(
         },
       });
 
-      console.log("consumeResult", consumeResult.result);
+      console.log("consumeResult", consumeResult);
 
       toast({
         title: "Consumed protected data",
@@ -125,6 +125,8 @@ export function useRentData(
       // const result = Buffer.from(await contentAsBlob.arrayBuffer());
 
       const decodedText = new TextDecoder().decode(taskResult.result);
+
+      console.log("decodedText", decodedText);
 
       return {
         taskId: consumeResult.taskId,
