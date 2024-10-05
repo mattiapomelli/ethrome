@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
@@ -17,6 +18,7 @@ type DockProps = {
 };
 
 export const Dock = ({ items, className }: DockProps) => {
+  const pathname = usePathname();
   return (
     <div className="fixed inset-x-5 bottom-5 z-50">
       <div
@@ -27,7 +29,12 @@ export const Dock = ({ items, className }: DockProps) => {
       >
         {items.map(({ title, icon, href }) => (
           <Link key={title} href={href}>
-            <div className="relative flex aspect-square items-center justify-center rounded-full p-2 transition-colors duration-300 ease-out hover:bg-foreground/20">
+            <div
+              className={cn(
+                "relative flex aspect-square items-center justify-center rounded-full p-2 transition-colors duration-300 ease-out hover:bg-foreground/20",
+                pathname === href && "border border-foreground/50",
+              )}
+            >
               {icon}
             </div>
           </Link>
