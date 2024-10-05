@@ -6,14 +6,13 @@ import { redirect } from "next/navigation";
 import { LoginButton } from "@/components/login-button";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useFarcasterAccount } from "@/lib/farcaster";
 
 const App = () => {
-  const { user, logout, ready } = usePrivy();
+  const { logout, ready } = usePrivy();
   const { requestFarcasterSignerFromWarpcast } = useFarcasterSigner();
 
-  const farcasterAccount = user?.linkedAccounts.find(
-    (account: { type: string }) => account.type === "farcaster",
-  );
+  const { farcasterAccount } = useFarcasterAccount();
 
   if (!ready) return <Skeleton className="flex-1" />;
 
@@ -21,7 +20,6 @@ const App = () => {
     return <LoginButton />;
   }
 
-  // @ts-expect-error - `signerPublicKey` is not defined on `farcasterAccount`
   if (!farcasterAccount.signerPublicKey) {
     return (
       <div className="flex size-full flex-1 items-center justify-center gap-2">
