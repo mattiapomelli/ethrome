@@ -60,7 +60,7 @@ export const FeedItem: React.FC<FeedItemProps> = ({ cast }) => {
 
       <button
         className={cn(
-          "absolute bottom-5 right-2 z-50 flex size-[50px] w-fit items-center justify-center gap-x-2 rounded-lg bg-primary px-2 shadow-md transition-colors duration-300 ease-out hover:bg-primary/20 disabled:cursor-not-allowed disabled:bg-primary/50 disabled:hover:bg-primary/50",
+          "absolute bottom-5 right-2 z-50 flex size-[50px] w-fit items-center justify-center gap-x-2 rounded-lg bg-primary px-2 shadow-md transition-colors duration-300 ease-out hover:bg-primary/80 disabled:cursor-not-allowed disabled:bg-primary/50 disabled:hover:bg-primary/50",
         )}
         onClick={onBuy}
         disabled={savedContent !== null || paidContent !== null}
