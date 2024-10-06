@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useSetDataForRenting } from "@/lib/hooks/iexec/use-set-data-for-renting";
 import { uploadFile } from "@/lib/supabase/storage";
+import { resizeImage } from "@/lib/utils";
 import { convertFileToBase64 } from "@/lib/utils";
 
 const createBlurredImage = (imageDataUrl: string) => {
@@ -125,7 +126,11 @@ const CreatePage = () => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (!data.picture || !blurredPreview) return;
 
-    const image = (await convertFileToBase64(data.picture)) as string;
+    // Resize the image to a maximum width or height of 1024 pixels
+    const resizedImage = await resizeImage(data.picture, 1024);
+
+    // Convert the resized image to base64
+    const image = (await convertFileToBase64(resizedImage)) as string;
 
     // Convert blurred preview data URL to File
     const blurredFile = await fetch(blurredPreview)

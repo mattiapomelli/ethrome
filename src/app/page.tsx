@@ -65,6 +65,7 @@ const App = () => {
         <div className="flex flex-col items-center gap-3">
           {signer.signer_approval_url && (
             <>
+              <h4 className="text-lg font-semibold">Authorize Signer</h4>
               <QRCodeSVG value={signer.signer_approval_url} />
               <Button>
                 <a href={signer.signer_approval_url} target="_blank" rel="noopener noreferrer">
