@@ -3,7 +3,6 @@
 import { EmbeddedCast, EmbedUrl } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
 import { CastWithEmbedUrl, FeedItem } from "@/components/feed-item";
-import Layout from "@/components/layout";
 import { CastWrapper } from "@/components/ui/cast/cast-wrapper";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCasts } from "@/lib/hooks/use-casts";
@@ -39,11 +38,9 @@ const FeedPage = () => {
   console.log("filteredCasts: ", filteredCasts);
 
   return (
-    <Layout>
-      <CastWrapper>
-        <div>{filteredCasts?.map((cast) => <FeedItem key={cast.hash} cast={cast} />)}</div>
-      </CastWrapper>
-    </Layout>
+    <CastWrapper>
+      <div>{filteredCasts?.map((cast) => <FeedItem key={cast.hash} cast={cast} />)}</div>
+    </CastWrapper>
   );
 };
 
