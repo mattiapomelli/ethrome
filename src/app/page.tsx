@@ -62,23 +62,24 @@ const App = () => {
   if (signer && signer.status !== "approved") {
     return (
       <div className="flex size-full flex-1 items-center justify-center gap-2">
-        {signer.signer_approval_url && (
-          <div className="flex flex-col items-center gap-3">
-            <QRCodeSVG value={signer.signer_approval_url} />
-            <Button>
-              <a href={signer.signer_approval_url} target="_blank" rel="noopener noreferrer">
-                Open in Warpcast
-              </a>
-            </Button>
-          </div>
-        )}
+        <div className="flex flex-col items-center gap-3">
+          {signer.signer_approval_url && (
+            <>
+              <QRCodeSVG value={signer.signer_approval_url} />
+              <Button>
+                <a href={signer.signer_approval_url} target="_blank" rel="noopener noreferrer">
+                  Open in Warpcast
+                </a>
+              </Button>
 
-        {/* <Button variant="outline" onClick={() => requestFarcasterSignerFromWarpcast()}>
-          Authorize Farcaster
-        </Button> */}
-        <Button variant="destructive" onClick={logout}>
-          Log out
-        </Button>
+              <div className="h-px w-full bg-gray-200" />
+            </>
+          )}
+
+          <Button variant="destructive" onClick={logout} className="w-full">
+            Log out
+          </Button>
+        </div>
       </div>
     );
   }
