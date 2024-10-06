@@ -23,6 +23,18 @@ const nextConfig = {
         port: "",
         pathname: "/storage/v1/object/public/assets/**",
       },
+      {
+        protocol: "https",
+        hostname: "i.imgur.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "imagedelivery.net",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };

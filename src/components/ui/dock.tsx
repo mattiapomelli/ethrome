@@ -24,10 +24,10 @@ export const Dock = ({ items, className }: DockProps) => {
   const pathname = usePathname();
 
   return (
-    <div className="fixed inset-x-5 bottom-5 z-50">
+    <div className="fixed inset-x-5 bottom-5 z-40">
       <div
         className={cn(
-          "mx-auto flex w-fit items-center justify-center gap-x-4 rounded-xl bg-foreground/10 px-3 py-2 backdrop-blur-sm",
+          "mx-auto flex w-fit items-center justify-center gap-x-4 rounded-xl bg-foreground/25 px-3 py-2 shadow-md backdrop-blur-md",
           className,
         )}
       >
@@ -35,8 +35,8 @@ export const Dock = ({ items, className }: DockProps) => {
           <Link key={title} href={href}>
             <div
               className={cn(
-                "relative flex aspect-square items-center justify-center rounded-full p-2 transition-colors duration-300 ease-out hover:bg-foreground/20",
-                pathname === href && "border border-foreground/50",
+                "relative flex aspect-square items-center justify-center rounded-full p-2 transition-colors duration-300 ease-out hover:bg-white/20",
+                pathname === href && "border border-white",
               )}
             >
               {icon}
@@ -46,11 +46,11 @@ export const Dock = ({ items, className }: DockProps) => {
 
         <button
           className={cn(
-            "relative flex aspect-square items-center justify-center rounded-full p-2 transition-colors duration-300 ease-out hover:bg-foreground/20",
+            "flex aspect-square items-center justify-center rounded-full p-2 transition-colors duration-300 ease-out hover:bg-white/20",
           )}
           onClick={logout}
         >
-          <LogOut className="size-4" />
+          <LogOut className="size-4 text-white" />
         </button>
       </div>
     </div>

@@ -6,12 +6,14 @@ import { AddressAvatar } from "@/components/address-avatar";
 import { cn } from "@/lib/utils";
 
 export type UserInfo = {
+  creatoreImgUrl?: string;
+  name?: string;
   address: Hex;
-  username: string;
+  text: string;
 };
 
 type CastProps = {
-  userInfo?: UserInfo;
+  userInfo: UserInfo;
   imgSrc: string;
   className?: string;
 } & HTMLAttributes<HTMLDivElement>;
@@ -26,12 +28,29 @@ export const Cast = ({ userInfo, imgSrc, className, ...props }: CastProps) => {
       {...props}
     >
       {/* User Information */}
-      {userInfo && (
-        <div className="absolute inset-x-2 bottom-[5.5rem] z-20 flex max-w-md flex-col gap-y-2 rounded-xl bg-foreground/10 px-2.5 py-2 backdrop-blur-sm">
+      {userInfo.creatoreImgUrl && userInfo.name ? (
+        <div className="absolute inset-x-2 bottom-[5.5rem] z-20 flex max-w-md flex-col gap-y-2 rounded-sm bg-foreground/25 px-2.5 py-2 shadow-md backdrop-blur-md">
+          <div className="flex items-center justify-start gap-x-2">
+            <Image
+              src={userInfo.creatoreImgUrl}
+              alt="Creator Profile Image"
+              className="rounded-full object-cover"
+              height={32}
+              width={32}
+            />
+            <h2 className="truncate text-sm font-semibold text-white">{userInfo.name}</h2>
+          </div>
+
+          <p className="text-sm text-white">{userInfo.text}</p>
+        </div>
+      ) : (
+        <div className="absolute inset-x-2 bottom-[5.5rem] z-20 flex max-w-md flex-col gap-y-2 rounded-sm bg-foreground/25 px-2.5 py-2 shadow-md backdrop-blur-md">
           <div className="flex items-center justify-start gap-x-2">
             <AddressAvatar address={userInfo.address} />
-            <h2 className="text-sm font-semibold">{userInfo.username}</h2>
+            <h2 className="truncate text-sm font-semibold text-white">{userInfo.address}</h2>
           </div>
+
+          <p className="text-sm text-white">{userInfo.text}</p>
         </div>
       )}
 

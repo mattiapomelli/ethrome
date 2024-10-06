@@ -6,12 +6,12 @@ import { Dock } from "@/components/ui/dock";
 const links = [
   {
     title: "Feeds",
-    icon: <Home className="size-4" />,
+    icon: <Home className="size-4 text-white" />,
     href: "/feed",
   },
   {
     title: "Create",
-    icon: <Plus className="size-4" />,
+    icon: <Plus className="size-4 text-white" />,
     href: "/create",
   },
 ];

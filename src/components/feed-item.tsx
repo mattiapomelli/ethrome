@@ -21,7 +21,7 @@ interface FeedItemProps {
 export const FeedItem: React.FC<FeedItemProps> = ({ cast }) => {
   const [paidContent, setPaidContent] = useState<string | null>(null);
 
-  const { protectedDataAddress, duration } = JSON.parse(cast.embeds[0].url);
+  const { protectedDataAddress, duration, price } = JSON.parse(cast.embeds[0].url);
   const previewUrl = extractPreviewUrl(cast.embeds[1].url);
 
   const { mutate: rentData, isPending } = useRentData({
@@ -36,8 +36,10 @@ export const FeedItem: React.FC<FeedItemProps> = ({ cast }) => {
   console.log("savedContent: ", savedContent);
 
   const userInfo: UserInfo = {
+    creatoreImgUrl: cast.author.pfp_url,
+    name: cast.author.display_name,
     address: cast.author.custody_address as Hex,
-    username: cast.text,
+    text: cast.text,
   };
 
   const onBuy = () => {
@@ -57,16 +59,18 @@ export const FeedItem: React.FC<FeedItemProps> = ({ cast }) => {
         imgSrc={savedContent ?? paidContent ?? previewUrl}
         userInfo={userInfo}
       />
+
       <button
         className={cn(
-          "absolute bottom-40 right-2 z-50 flex aspect-square items-center justify-center rounded-full border border-primary p-2 transition-colors duration-300 ease-out hover:bg-primary/20",
+          "absolute bottom-5 right-2 z-50 flex size-[50px] w-fit items-center justify-center gap-x-2 rounded-lg bg-primary px-2 shadow-md transition-colors duration-300 ease-out hover:bg-primary/20",
         )}
         onClick={onBuy}
       >
+        {price && <span className="text-white">{price}</span>}
         {isPending ? (
-          <Spinner className="size-4 text-primary" />
+          <Spinner className="size-4 text-white" />
         ) : (
-          <LockOpen className="size-4 text-primary" />
+          <LockOpen className="size-4 text-white" />
         )}
       </button>
     </div>
