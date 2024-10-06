@@ -1,5 +1,5 @@
 import { CastWithInteractions, EmbedUrl } from "@neynar/nodejs-sdk/build/neynar-api/v2";
-import { LockOpen } from "lucide-react";
+import { LockOpen, Lock } from "lucide-react";
 import { useState } from "react";
 import { Hex } from "viem";
 
@@ -33,10 +33,8 @@ export const FeedItem: React.FC<FeedItemProps> = ({ cast }) => {
 
   const { data: savedContent } = useGetContent(protectedDataAddress);
 
-  console.log("savedContent: ", savedContent);
-
   const userInfo: UserInfo = {
-    creatoreImgUrl: cast.author.pfp_url,
+    creatorImgUrl: cast.author.pfp_url,
     name: cast.author.display_name,
     address: cast.author.custody_address as Hex,
     text: cast.text,
@@ -62,15 +60,18 @@ export const FeedItem: React.FC<FeedItemProps> = ({ cast }) => {
 
       <button
         className={cn(
-          "absolute bottom-5 right-2 z-50 flex size-[50px] w-fit items-center justify-center gap-x-2 rounded-lg bg-primary px-2 shadow-md transition-colors duration-300 ease-out hover:bg-primary/20",
+          "absolute bottom-5 right-2 z-50 flex size-[50px] w-fit items-center justify-center gap-x-2 rounded-lg bg-primary px-2 shadow-md transition-colors duration-300 ease-out hover:bg-primary/20 disabled:cursor-not-allowed disabled:bg-primary/50 disabled:hover:bg-primary/50",
         )}
         onClick={onBuy}
+        disabled={savedContent !== null || paidContent !== null}
       >
         {price && <span className="text-white">{price}</span>}
-        {isPending ? (
+        {savedContent !== null || paidContent !== null ? (
+          <LockOpen className="size-4 text-white" />
+        ) : isPending ? (
           <Spinner className="size-4 text-white" />
         ) : (
-          <LockOpen className="size-4 text-white" />
+          <Lock className="size-4 text-white" />
         )}
       </button>
     </div>

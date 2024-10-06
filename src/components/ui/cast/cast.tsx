@@ -6,7 +6,7 @@ import { AddressAvatar } from "@/components/address-avatar";
 import { cn } from "@/lib/utils";
 
 export type UserInfo = {
-  creatoreImgUrl?: string;
+  creatorImgUrl?: string;
   name?: string;
   address: Hex;
   text: string;
@@ -28,11 +28,11 @@ export const Cast = ({ userInfo, imgSrc, className, ...props }: CastProps) => {
       {...props}
     >
       {/* User Information */}
-      {userInfo.creatoreImgUrl && userInfo.name ? (
+      {userInfo.creatorImgUrl && userInfo.name ? (
         <div className="absolute inset-x-2 bottom-[5.5rem] z-20 flex max-w-md flex-col gap-y-2 rounded-sm bg-foreground/25 px-2.5 py-2 shadow-md backdrop-blur-md">
           <div className="flex items-center justify-start gap-x-2">
             <Image
-              src={userInfo.creatoreImgUrl}
+              src={userInfo.creatorImgUrl}
               alt="Creator Profile Image"
               className="rounded-full object-cover"
               height={32}
