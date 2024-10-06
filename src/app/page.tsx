@@ -36,8 +36,13 @@ const App = () => {
       const data = await ky.post("/api/signer").json<FarcasterUser>();
       localStorage.setItem("farcaster-signer-uuid", data.signer_uuid);
 
+      if (data && data.status !== "approved" && data.signer_approval_url) {
+        window.location.href = data.signer_approval_url;
+      }
+
       return data;
     },
+    enabled: !!farcasterAccount,
     refetchInterval: 2000,
   });
 
