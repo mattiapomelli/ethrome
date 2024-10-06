@@ -27,10 +27,25 @@ const createBlurredImage = (imageDataUrl: string) => {
       canvas.width = img.width;
       canvas.height = img.height;
 
-      ctx.filter = "blur(24px)";
-      ctx.drawImage(img, 0, 0, img.width, img.height);
+      // Apply blur filter using SVG filter for better compatibility
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="${img.width}" height="${img.height}">
+          <filter id="blur" x="0" y="0">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="24" />
+          </filter>
+          <image href="${imageDataUrl}" filter="url(#blur)" width="${img.width}" height="${img.height}" />
+        </svg>
+      `;
+      const svgBlob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(svgBlob);
 
-      resolve(canvas.toDataURL("image/jpeg"));
+      const svgImg = new Image();
+      svgImg.onload = () => {
+        ctx.drawImage(svgImg, 0, 0, img.width, img.height);
+        URL.revokeObjectURL(url);
+        resolve(canvas.toDataURL("image/jpeg"));
+      };
+      svgImg.src = url;
     };
     img.src = imageDataUrl;
   });
