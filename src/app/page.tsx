@@ -36,10 +36,6 @@ const App = () => {
       const data = await ky.post("/api/signer").json<FarcasterUser>();
       localStorage.setItem("farcaster-signer-uuid", data.signer_uuid);
 
-      if (data && data.status !== "approved" && data.signer_approval_url) {
-        window.location.href = data.signer_approval_url;
-      }
-
       return data;
     },
     enabled: !!farcasterAccount,
@@ -71,7 +67,7 @@ const App = () => {
             <QRCodeSVG value={signer.signer_approval_url} />
             <Button>
               <a href={signer.signer_approval_url} target="_blank" rel="noopener noreferrer">
-                Open in Farcaster
+                Open in Warpcast
               </a>
             </Button>
           </div>
