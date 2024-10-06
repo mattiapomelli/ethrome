@@ -31,7 +31,7 @@ const createBlurredImage = (imageDataUrl: string) => {
       const svg = `
         <svg xmlns="http://www.w3.org/2000/svg" width="${img.width}" height="${img.height}">
           <filter id="blur" x="0" y="0">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="24" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="35" />
           </filter>
           <image href="${imageDataUrl}" filter="url(#blur)" width="${img.width}" height="${img.height}" />
         </svg>
