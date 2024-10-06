@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## AlphaCast
+The easiest way to share and monetize your content to your existing network. Alpha or otherwise ;)
 
-## Getting Started
+-----
+AlphaCast is a **private, censorship resistant [Farcaster](https://farcaster.xyz/) client** that allows creators to **monetize their content** for their existing Farcaster network. 
 
-First, run the development server:
+### Table of Contents
+- [For Creators](#for-creators)
+- [For Consumers](#for-consumers)
+- [How to Use](#how-to-use)
+- [Deploy it yourself](#deploy-it-yourself)
+- [Extensions](#possible-extensions)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### For Creators
+Creators can create casts that contain private embedded content. This private content is encrypted and stored on the Bellecour chain using the [IExec](https://www.iex.ec/) SDK. Users can rent this content by making a payment through IExec. This gives them temporary access for the duration set by the creator.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This model **gives creators full control of the sharing of their content.** AlphaCast simply acts as a marketplace; we never store any the creators' keys or data.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### For Consumers
+Users can easily sign into AlphaCast with their Farcaster accounts using [Privy](https://www.privy.io/). This lets them **import their existing network** and gives them a **seamless onboarding experience.** 
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+AlphaCast gives users an engaging TikTok like feed for discovering creators and content. We rerank posts using ['mbd](https://mbd.xyz) to **personalize the user's feed** based on their interests and interaction history. Each time a user makes a purchase, their feed will be curated to show them similar content in the future.
 
-## Learn More
+### How to use
+AlphaCast is a deployed dApp that you can accessed at [alphacast.vercel.app](https://alphacast.vercel.app). 
 
-To learn more about Next.js, take a look at the following resources:
+**Steps:**
+1. Visit the [website](https://alphacast.vercel.app)
+2. Scan the QR code to link your Farcaster account
+3. Start scrolling the feed and purchasing content
+4. Or, become a creator and monetize your "alpha" ;)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Deploy it yourself
+Alphacast is fully open source. If you wish, you can deploy and host the client yourself.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+**Steps:**
+1. Clone the Github repo: `git clone https://github.com/mattiapomelli/ethrome.git`
+2. Install the dependencies: `cd ethrome && npm install`
+3. Build and run the project: `npm run build && npm run start`
+4. Visit the dApp running locally at [http://localhost:3000](http://localhost:3000)
+5. (Optional) Deploy and host the dApp using your favorite suite (Vercel, Heroku etc.)
+ 
+### Possible Extensions
+- Creator/content discovery based on metadata (semantic search)
+- Add subscriptions that give users access to all of a creators' posts
+- Add support for video content
+- Allow creators to delete content
