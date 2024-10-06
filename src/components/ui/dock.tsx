@@ -4,6 +4,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
@@ -21,7 +22,17 @@ type DockProps = {
 
 export const Dock = ({ items, className }: DockProps) => {
   const { logout } = usePrivy();
+  const router = useRouter();
   const pathname = usePathname();
+
+  const handleLogout = () => {
+    try {
+      logout();
+    } finally {
+      localStorage.clear();
+      router.push("/");
+    }
+  };
 
   return (
     <div className="fixed inset-x-5 bottom-5 z-40">
@@ -48,7 +59,7 @@ export const Dock = ({ items, className }: DockProps) => {
           className={cn(
             "flex aspect-square items-center justify-center rounded-full p-2 transition-colors duration-300 ease-out hover:bg-white/20",
           )}
-          onClick={logout}
+          onClick={handleLogout}
         >
           <LogOut className="size-4 text-white" />
         </button>
