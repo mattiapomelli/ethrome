@@ -1,8 +1,8 @@
-## AlphaCast
+## OnlyCast
 The easiest way to share and monetize your content to your existing network. Alpha or otherwise ;)
 
 -----
-AlphaCast is a **private, censorship resistant [Farcaster](https://farcaster.xyz/) client** that allows creators to **monetize their content** for their existing Farcaster network. 
+OnlyCast is a **private, censorship resistant [Farcaster](https://farcaster.xyz/) client** that allows creators to **monetize their content** for their existing Farcaster network. 
 
 ### Table of Contents
 - [For Creators](#for-creators)
@@ -14,24 +14,24 @@ AlphaCast is a **private, censorship resistant [Farcaster](https://farcaster.xyz
 ### For Creators
 Creators can create casts that contain private embedded content. This private content is encrypted and stored on the Bellecour chain using the [IExec](https://www.iex.ec/) SDK. Users can rent this content by making a payment through IExec. This gives them temporary access for the duration set by the creator.
 
-This model **gives creators full control of the sharing of their content.** AlphaCast simply acts as a marketplace; we never store any the creators' keys or data.
+This model **gives creators full control of the sharing of their content.** OnlyCast simply acts as a marketplace; we never store any the creators' keys or data.
 
 ### For Consumers
-Users can easily sign into AlphaCast with their Farcaster accounts using [Privy](https://www.privy.io/). This lets them **import their existing network** and gives them a **seamless onboarding experience.** 
+Users can easily sign into OnlyCast with their Farcaster accounts using [Privy](https://www.privy.io/). This lets them **import their existing network** and gives them a **seamless onboarding experience.** 
 
-AlphaCast gives users an engaging TikTok like feed for discovering creators and content. We rerank posts using ['mbd](https://mbd.xyz) to **personalize the user's feed** based on their interests and interaction history. Each time a user makes a purchase, their feed will be curated to show them similar content in the future.
+OnlyCast gives users an engaging TikTok like feed for discovering creators and content. We rerank posts using ['mbd](https://mbd.xyz) to **personalize the user's feed** based on their interests and interaction history. Each time a user makes a purchase, their feed will be curated to show them similar content in the future.
 
 ### How to use
-AlphaCast is a deployed dApp that you can accessed at [alphacast.vercel.app](https://alphacast.vercel.app). 
+OnlyCast is a deployed dApp that you can accessed at [OnlyCast.vercel.app](https://OnlyCast.vercel.app). 
 
 **Steps:**
-1. Visit the [website](https://alphacast.vercel.app)
+1. Visit the [website](https://OnlyCast.vercel.app)
 2. Scan the QR code to link your Farcaster account
 3. Start scrolling the feed and purchasing content
 4. Or, become a creator and monetize your "alpha" ;)
 
 ### Deploy it yourself
-Alphacast is fully open source. If you wish, you can deploy and host the client yourself.
+OnlyCast is fully open source. If you wish, you can deploy and host the client yourself.
 
 **Steps:**
 1. Clone the Github repo: `git clone https://github.com/mattiapomelli/ethrome.git`
