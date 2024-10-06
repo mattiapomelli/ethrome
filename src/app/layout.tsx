@@ -9,7 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 const fontSans = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -30,6 +30,13 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
