@@ -28,6 +28,24 @@ export const FeedItem: React.FC<FeedItemProps> = ({ cast }) => {
     onSuccess({ content, taskId }) {
       setPaidContent(content);
       localStorage.setItem(`task-id-${protectedDataAddress}`, taskId);
+
+      // Like the cast for engagement/personalization bonus
+      (async () => {
+        const signerUuid = localStorage.getItem("farcaster-signer-uuid");
+
+        try {
+          await fetch("/api/cast/like", {
+            method: "POST",
+            body: JSON.stringify({
+              signer_uuid: signerUuid!,
+              cast_hash: cast.hash,
+            }),
+          });
+
+        } catch (error) {
+          console.error("Error liking cast: ", error);
+        }
+      })();
     },
   });
 
