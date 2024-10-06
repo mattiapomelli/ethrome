@@ -4,7 +4,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
