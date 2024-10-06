@@ -27,7 +27,7 @@ const createBlurredImage = (imageDataUrl: string) => {
       canvas.width = img.width;
       canvas.height = img.height;
 
-      ctx.filter = "blur(15px)";
+      ctx.filter = "blur(24px)";
       ctx.drawImage(img, 0, 0, img.width, img.height);
 
       resolve(canvas.toDataURL("image/jpeg"));
