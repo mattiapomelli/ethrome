@@ -23,28 +23,70 @@ const createBlurredImage = (imageDataUrl: string) => {
     img.onload = () => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d")!;
-      canvas.width = img.width;
-      canvas.height = img.height;
 
-      // Apply blur filter using SVG filter for better compatibility
-      const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="${img.width}" height="${img.height}">
-          <filter id="blur" x="0" y="0">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="35" />
-          </filter>
-          <image href="${imageDataUrl}" filter="url(#blur)" width="${img.width}" height="${img.height}" />
-        </svg>
-      `;
-      const svgBlob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
-      const url = URL.createObjectURL(svgBlob);
+      // Further reduce the scale factor for more blur
+      const scaleFactor = 0.02;
 
-      const svgImg = new Image();
-      svgImg.onload = () => {
-        ctx.drawImage(svgImg, 0, 0, img.width, img.height);
-        URL.revokeObjectURL(url);
-        resolve(canvas.toDataURL("image/jpeg"));
+      const scaledWidth = Math.max(1, Math.floor(img.width * scaleFactor));
+      const scaledHeight = Math.max(1, Math.floor(img.height * scaleFactor));
+
+      // Draw scaled down version
+      canvas.width = scaledWidth;
+      canvas.height = scaledHeight;
+      ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
+
+      // Apply two passes of box blur
+      const applyBoxBlur = (imageData: ImageData) => {
+        const pixels = imageData.data;
+        const tempPixels = new Uint8ClampedArray(pixels.length);
+
+        const kernelSize = 3;
+        const kernelHalf = Math.floor(kernelSize / 2);
+
+        for (let y = 0; y < scaledHeight; y++) {
+          for (let x = 0; x < scaledWidth; x++) {
+            let r = 0,
+              g = 0,
+              b = 0,
+              a = 0,
+              count = 0;
+            for (let ky = -kernelHalf; ky <= kernelHalf; ky++) {
+              for (let kx = -kernelHalf; kx <= kernelHalf; kx++) {
+                const px = Math.min(scaledWidth - 1, Math.max(0, x + kx));
+                const py = Math.min(scaledHeight - 1, Math.max(0, y + ky));
+                const i = (py * scaledWidth + px) * 4;
+                r += pixels[i];
+                g += pixels[i + 1];
+                b += pixels[i + 2];
+                a += pixels[i + 3];
+                count++;
+              }
+            }
+            const i = (y * scaledWidth + x) * 4;
+            tempPixels[i] = r / count;
+            tempPixels[i + 1] = g / count;
+            tempPixels[i + 2] = b / count;
+            tempPixels[i + 3] = a / count;
+          }
+        }
+        return new ImageData(tempPixels, scaledWidth, scaledHeight);
       };
-      svgImg.src = url;
+
+      let imageData = ctx.getImageData(0, 0, scaledWidth, scaledHeight);
+      imageData = applyBoxBlur(imageData);
+      imageData = applyBoxBlur(imageData);
+      ctx.putImageData(imageData, 0, 0);
+
+      // Scale back up to original size
+      const finalCanvas = document.createElement("canvas");
+      finalCanvas.width = img.width;
+      finalCanvas.height = img.height;
+      const finalCtx = finalCanvas.getContext("2d")!;
+      finalCtx.imageSmoothingEnabled = true;
+      finalCtx.imageSmoothingQuality = "low";
+      finalCtx.drawImage(canvas, 0, 0, scaledWidth, scaledHeight, 0, 0, img.width, img.height);
+
+      resolve(finalCanvas.toDataURL("image/jpeg", 0.3));
     };
     img.src = imageDataUrl;
   });
