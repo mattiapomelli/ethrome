@@ -18,22 +18,38 @@ import { useSetDataForRenting } from "@/lib/hooks/iexec/use-set-data-for-renting
 import { uploadFile } from "@/lib/supabase/storage";
 import { convertFileToBase64 } from "@/lib/utils";
 
+const createBlurredImage = (imageDataUrl: string) => {
+  return new Promise<string>((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d")!;
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      ctx.filter = "blur(15px)";
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+
+      resolve(canvas.toDataURL("image/jpeg"));
+    };
+    img.src = imageDataUrl;
+  });
+};
+
 const formSchema = z.object({
   text: z.string().min(1, "Text is required"),
   price: z.number().min(0, "Price must be a positive number"),
   picture: z.instanceof(File),
-  preview: z.instanceof(File),
 });
 
 const CreatePage = () => {
   const [animationParentPicture] = useAutoAnimate();
-  const [animationParentPreview] = useAutoAnimate();
 
   const chainId = useChainId();
   console.log("chainId", chainId);
 
   const [picturePreview, setPicturePreview] = useState<string | null>(null);
-  const [previewPreview, setPreviewPreview] = useState<string | null>(null);
+  const [blurredPreview, setBlurredPreview] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,12 +67,16 @@ const CreatePage = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    if (!data.picture) return;
+    if (!data.picture || !blurredPreview) return;
 
     const image = (await convertFileToBase64(data.picture)) as string;
-    // const preview = (await convertFileToBase64(data.preview)) as string;
 
-    const previewUrl = await uploadFile(data.preview);
+    // Convert blurred preview data URL to File
+    const blurredFile = await fetch(blurredPreview)
+      .then((res) => res.blob())
+      .then((blob) => new File([blob], "blurred_preview.jpg", { type: "image/jpeg" }));
+
+    const previewUrl = await uploadFile(blurredFile);
     if (!previewUrl) return;
 
     console.log("previewUrl", previewUrl);
@@ -65,7 +85,6 @@ const CreatePage = () => {
       price: data.price,
       duration: 60 * 60 * 24 * 30, // 30 days
       data: {
-        // A binary "file" field must be used if you use the app provided by iExec
         file: new TextEncoder().encode(image),
       },
       name: data.text,
@@ -73,21 +92,24 @@ const CreatePage = () => {
     });
   };
 
-  const handleFileChange = (
+  const handleFileChange = async (
     file: File | undefined,
-    setPreview: (value: string | null) => void,
     onChange: (value: File | undefined) => void,
   ) => {
     onChange(file);
 
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
+      reader.onloadend = async () => {
+        const imageDataUrl = reader.result as string;
+        setPicturePreview(imageDataUrl);
+        const blurredDataUrl = await createBlurredImage(imageDataUrl);
+        setBlurredPreview(blurredDataUrl);
       };
       reader.readAsDataURL(file);
     } else {
-      setPreview(null);
+      setPicturePreview(null);
+      setBlurredPreview(null);
     }
   };
 
@@ -143,7 +165,7 @@ const CreatePage = () => {
                                   accept="image/*"
                                   onChange={(e) => {
                                     const file = e.target.files?.[0];
-                                    handleFileChange(file, setPicturePreview, onChange);
+                                    handleFileChange(file, onChange);
                                   }}
                                   {...field}
                                 />
@@ -164,52 +186,20 @@ const CreatePage = () => {
                         )}
                       />
                     </div>
-                    <div className="space-y-2" ref={animationParentPreview}>
-                      <Controller
-                        name="preview"
-                        control={form.control}
-                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                        render={({ field: { onChange, value, ...field } }) => (
-                          <FormItem>
-                            <FormControl>
-                              <>
-                                {previewPreview ? (
-                                  // eslint-disable-next-line @next/next/no-img-element
-                                  <img
-                                    src={previewPreview}
-                                    alt="Uploaded preview"
-                                    className="h-64 w-full rounded object-cover"
-                                  />
-                                ) : (
-                                  <div className="h-64 w-full rounded bg-muted" />
-                                )}
-                                <input
-                                  type="file"
-                                  id="preview-upload"
-                                  className="hidden"
-                                  accept="image/*"
-                                  onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    handleFileChange(file, setPreviewPreview, onChange);
-                                  }}
-                                  {...field}
-                                />
-                                <Button
-                                  type="button"
-                                  variant="outline"
-                                  size="sm"
-                                  className="mt-2 flex w-full items-center justify-center"
-                                  onClick={() => document.getElementById("preview-upload")?.click()}
-                                >
-                                  <Paperclip className="size-4 min-w-4" />
-                                  {previewPreview ? "Replace" : "Add preview"}
-                                </Button>
-                              </>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                    <div className="space-y-2">
+                      {blurredPreview ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={blurredPreview}
+                          alt="Blurred preview"
+                          className="h-64 w-full rounded object-cover"
+                        />
+                      ) : (
+                        <div className="h-64 w-full rounded bg-muted" />
+                      )}
+                      <p className="text-sm text-muted-foreground">
+                        Blurred preview (Auto-generated)
+                      </p>
                     </div>
                   </div>
                   <FormField
