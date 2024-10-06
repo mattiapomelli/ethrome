@@ -12,7 +12,7 @@ const handleRequest = frames(async (ctx) => {
     // eslint-disable-next-line @next/next/no-img-element
     image: previewUrl,
     buttons: [
-      <Button action="link" target={`${siteConfig.url}`}>
+      <Button action="link" target={`${siteConfig.url}/feed`}>
         Buy on OnlyCast
       </Button>,
     ],
