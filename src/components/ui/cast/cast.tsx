@@ -44,7 +44,7 @@ export const Cast = ({ userInfo, imgSrc, className, ...props }: CastProps) => {
           <p className="text-sm text-white">{userInfo.text}</p>
         </div>
       ) : (
-        <div className="absolute inset-x-2 bottom-36 z-20 flex max-w-md flex-col gap-y-2 rounded-sm bg-foreground/25 px-2.5 py-2 shadow-md backdrop-blur-md">
+        <div className="absolute inset-x-2 bottom-36 z-20 flex w-3/4 max-w-lg flex-col gap-y-2 rounded-sm bg-foreground/25 px-2.5 py-2 shadow-md backdrop-blur-md">
           <div className="flex items-center justify-start gap-x-2">
             <AddressAvatar address={userInfo.address} size={4} />
             <h2 className="truncate text-sm font-semibold text-white">{userInfo.address}</h2>
