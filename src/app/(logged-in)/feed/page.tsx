@@ -41,7 +41,7 @@ const FeedPage = () => {
   return (
     <Layout>
       <CastWrapper>
-        <div>{filteredCasts?.map((cast) => <FeedItem key={cast.hash} cast={cast} />)}</div>;
+        <div>{filteredCasts?.map((cast) => <FeedItem key={cast.hash} cast={cast} />)}</div>
       </CastWrapper>
     </Layout>
   );
