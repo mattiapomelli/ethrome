@@ -38,7 +38,7 @@ export async function GET(req: Request) {
     method: "POST",
     body: JSON.stringify({
       user_id: viewerFid,
-      items_list: ["0xd3f845bc6250f3c50f911d7c99effee2b1cf6b9f", ...casts.map((cast) => cast.hash)],
+      items_list: casts.map((cast) => cast.hash),
       return_metadata: true,
     }),
   });

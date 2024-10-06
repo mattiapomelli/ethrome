@@ -6,10 +6,11 @@ export async function POST(req: Request) {
   const body = await req.json();
 
   try {
+    const recast = await neynarClient.publishReactionToCast(body.signer_uuid, "recast", body.cast_hash);
     const like = await neynarClient.publishReactionToCast(body.signer_uuid, "like", body.cast_hash);
 
-    if (like.success) {
-      return NextResponse.json(like, { status: 200 });
+    if (recast.success && like.success) {
+      return NextResponse.json({ success: true }, { status: 200 });
     } else {
       return NextResponse.json({ error: "An error occurred" }, { status: 500 });
     }
