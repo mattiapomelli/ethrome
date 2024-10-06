@@ -29,7 +29,7 @@ export const Cast = ({ userInfo, imgSrc, className, ...props }: CastProps) => {
     >
       {/* User Information */}
       {userInfo.creatorImgUrl && userInfo.name ? (
-        <div className="absolute inset-x-2 bottom-36 z-20 flex max-w-md flex-col gap-y-2 rounded-sm bg-foreground/25 px-2.5 py-2 shadow-md backdrop-blur-md">
+        <div className="absolute inset-x-2 bottom-36 z-20 flex w-3/4 max-w-lg flex-col gap-y-2 rounded-sm bg-foreground/25 px-2.5 py-2 shadow-md backdrop-blur-md">
           <div className="flex items-center justify-start gap-x-2">
             <Image
               src={userInfo.creatorImgUrl}
