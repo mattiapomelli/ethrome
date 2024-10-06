@@ -66,7 +66,17 @@ const App = () => {
   if (signer && signer.status !== "approved") {
     return (
       <div className="flex size-full flex-1 items-center justify-center gap-2">
-        {signer.signer_approval_url && <QRCodeSVG value={signer.signer_approval_url} />}
+        {signer.signer_approval_url && (
+          <div className="flex flex-col items-center gap-3">
+            <QRCodeSVG value={signer.signer_approval_url} />
+            <Button>
+              <a href={signer.signer_approval_url} target="_blank" rel="noopener noreferrer">
+                Open in Farcaster
+              </a>
+            </Button>
+          </div>
+        )}
+
         {/* <Button variant="outline" onClick={() => requestFarcasterSignerFromWarpcast()}>
           Authorize Farcaster
         </Button> */}
